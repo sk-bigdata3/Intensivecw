@@ -731,13 +731,12 @@ install은 id/pw로 할수도있고 key로 할수도 있음
 ![](호스트지정.PNG)
 2. 호스트 연결 확인
 ![](호스트연결확인.PNG)
-3. 로그인 인증
-. centos로 접속하니 install 이 안되서 root로 접속함
-![](로그인 인증.PNG)
+3. 로그인 인증 (centos로 접속 시 install 이 안되서 root로 접속함)
+![](로그인인증.PNG)
 4. install 확인
-![](install 확인.PNG)
+![](install확인.PNG)
 5. install 완료
-![](install 완료.PNG)
+![](install완료.PNG)
 6. 사용자 지정 서비스 선택
 ![](사용자지정서비스선택.PNG)
 7. cluster setup

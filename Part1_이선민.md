@@ -93,6 +93,7 @@ passwd: all authentication tokens updated successfully.
 ~~~
 [sunmin@localhost ~]$ sudo userdel -r training
 ~~~
+*** user / user group 부분 다시봐야함 ***
 
 
 ### Check disk volume

@@ -732,7 +732,7 @@ install은 id/pw로 할수도있고 key로 할수도 있음
 2. 호스트 연결 확인
 ![](호스트연결확인.PNG)
 3. 로그인 인증
-centos로 접속하니 install 이 안되서 root로 접속함
+. centos로 접속하니 install 이 안되서 root로 접속함
 ![](로그인 인증.PNG)
 4. install 확인
 ![](install 확인.PNG)

@@ -42,6 +42,8 @@ https://wooyoung85.tistory.com/47
 ### 시작 전 확인 사항
 ```
 VMware workstation Player 14 버전에 CentOS 7 4대를 각각 설치
+> 16GB 이상일 경우 4대 , 8GB일 경우 3대로 실습해보는 것이 좋을 듯
+> 메모리상 문제로 서버가 약해서 설치도중 죽는 현상 발생
 설치시, 메모리는 40G, RAM은 2G로 할당
 이더넷 네트워크는 켜있는 상태로 설정
 소프트웨어는 GEOME ? 로 설정해야 윈도우처럼 사용가능
@@ -121,7 +123,7 @@ nm
 ::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
 192.168.157.129 nm
 ```
-이떄, 192.168.157.128 master.cdhcluster.com nm 이런식으로 먼저 변경해주는게 좋음
+이때, 192.168.157.128 master.cdhcluster.com nm 이런식으로 먼저 변경해주는게 좋음
 이번 실습 시는 이부분을 뒤늦게 함
 
 ### 방화벽 내리기
@@ -737,7 +739,7 @@ install은 id/pw로 할수도있고 key로 할수도 있음
 4. install 확인
 ![](install 확인.PNG)
 5. install 완료
-![](install 확인.PNG)
+![](install 완료.PNG)
 6. 사용자 지정 서비스 선택
 ![](사용자지정서비스선택.PNG)
 7. cluster setup
@@ -747,4 +749,4 @@ install은 id/pw로 할수도있고 key로 할수도 있음
 8. db연결 완료
 ![](db연결완료.PNG)
 
-* 뒷부분은 캡처 못함. 일단 기본 클러스티/서비스 설치 완료
+* 뒷부분은 캡처 못함. 일단 기본 클러스터/서비스(HDFS, YARN, ZOOKEEPER) 설치 완료

@@ -739,7 +739,7 @@ install은 id/pw로 할수도있고 key로 할수도 있음
 4. install 확인
 ![](install 확인.PNG)
 5. install 완료
-![](install 완료.PNG)
+![](install 완료.PNB)
 6. 사용자 지정 서비스 선택
 ![](사용자지정서비스선택.PNG)
 7. cluster setup

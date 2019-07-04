@@ -1,5 +1,9 @@
+# Cloudera 5.15.x
+
+
 #### 참고 웹 사이트  
 https://victorydntmd.tistory.com/212?category=704005
+https://www.cloudera.com/documentation/enterprise/5-15-x/topics/configure_cm_repo.html
 
 ### check ip 
 hostname -I
@@ -37,6 +41,7 @@ cpe:/o:centos:centos:7
 ~~~
 
 ## 초기 셋팅
+
 ### SSH Server setting
 ~~~
 # SSH 서버가 실행되고 있는지 확인
@@ -132,9 +137,169 @@ I/O size (minimum/optimal): 512 bytes / 512 bytes
 #### update yum, install wget
 ~~~
 sudo yum update
+
+# Update 시에  Cannot find a valid baseurl for repo: base/7/x86_64 라는 에러 발생하면
+sudo dhclient
+
 sudo yum install -y wget
 ~~~
 
+
+## Cloudera
+
+### Download the cloudera-manager.repo file for your OS version to the /etc/yum.repos.d/ directory 
+~~~
+[sunmin@localhost ~]$ sudo wget https://archive.cloudera.com/cm5/redhat/7/x86_64/cm/cloudera-manager.repo -P /etc/yum.repos.d/
+
+--2019-07-02 19:50:19--  https://archive.cloudera.com/cm5/redhat/7/x86_64/cm/cloudera-manager.repo
+Resolving archive.cloudera.com (archive.cloudera.com)... 151.101.88.167
+Connecting to archive.cloudera.com (archive.cloudera.com)|151.101.88.167|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 290 [binary/octet-stream]
+Saving to: ‘/etc/yum.repos.d/cloudera-manager.repo’
+
+100%[======================================>] 290         --.-K/s   in 0s      
+
+2019-07-02 19:50:20 (31.5 MB/s) - ‘/etc/yum.repos.d/cloudera-manager.repo’ saved [290/290]
+~~~
+
+~~~
+[sunmin@localhost ~]$ sudo vi /etc/yum.repos.d/cloudera-manager.repo
+#modify baseurl => https://archive.cloudera.com/cm5/redhat/7/x86_64/cm/5.15.0/
+# url is 'Location' in Cloudera Manager Version and Download Information
+~~~
+
+### Import the repository signing GPG key
+~~*version 선택 기준?*~~
+~~~
+[sunmin@localhost ~]$ sudo rpm --import https://archive.cloudera.com/cm5/redhat/7/x86_64/cm/RPM-GPG-KEY-cloudera
+~~~
+
+
+### Installing the JDK Using Cloudera Manager
+*The JDK must be installed at /usr/java/jdk-version.*
+
+~~~
+# 5.15.x 기준
+[sunmin@localhost ~]$ sudo yum install oracle-j2sdk1.7
+~~~
+
+### Install the Cloudera Manager Server Packages
+~~~
+[sunmin@localhost ~]$ sudo yum install cloudera-manager-daemons cloudera-manager-server
+[sunmin@localhost ~]$ sudo yum install cloudera-manager-daemons cloudera-manager-agent
+~~~
+
+### Installing MariaDB Server
+~~~
+[sunmin@localhost ~]$ sudo yum install mariadb-server
+[sunmin@localhost lib]$ sudo systemctl enable mariadb
+Created symlink from /etc/systemd/system/multi-user.target.wants/mariadb.service to /usr/lib/systemd/system/mariadb.service.
+[sunmin@localhost ~]$ sudo systemctl start mariadb
+
+[sunmin@localhost ~]$ sudo /usr/bin/mysql_secure_installation
+Y>Y>N>Y>Y
+~~~
+
+*예외 처리*
+~~~
+systemctl status mariadb
+
+# mariadb 삭제
+[sunmin@localhost system]$  yum list installed mariadb\*
+[sunmin@localhost system]$ sudo yum remove -y mariadb-libs.x86_64 
+~~~
+
+### Installing the MySQL JDBC Driver for MariaDB
+~~~
+[sunmin@localhost ~]$ sudo wget https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-5.1.46.tar.gz
+[sunmin@localhost ~]$ tar zxvf mysql-connector-java-5.1.46.tar.gz
+
+[sunmin@localhost ~]$ sudo mkdir -p /usr/share/java/
+[sudo] password for sunmin: 
+[sunmin@localhost ~]$ cd mysql-connector-java-5.1.46
+[sunmin@localhost mysql-connector-java-5.1.46]$ sudo cp mysql-connector-java-5.1.46-bin.jar /usr/share/java/mysql-connector-java.jar
+~~~
+
+
+### Creating Databases for Cloudera Software
+~~~
+[sunmin@localhost ~]$ mysql -u root -p
+
+MariaDB [(none)]> create database scm default character set utf8 default collate utf8_general_ci;
+MariaDB [(none)]> grant all on scm.* to 'scm'@'%' identified by 'password';
+
+MariaDB [(none)]> create database amon default character set utf8 default collate utf8_general_ci;
+MariaDB [(none)]> grant all on amon.* to 'amon'@'%' identified by 'password';
+
+MariaDB [(none)]> create database rman default character set utf8 default collate utf8_general_ci;
+MariaDB [(none)]> grant all on rman.* to 'rman'@'%' identified by 'password';
+
+MariaDB [(none)]> create database hue default character set utf8 default collate utf8_general_ci;
+MariaDB [(none)]> grant all on hue.* to 'hue'@'%' identified by 'password';
+
+MariaDB [(none)]> create database metastore default character set utf8 default collate utf8_general_ci;
+MariaDB [(none)]> grant all on metastore.* to 'metastore'@'%' identified by 'password';
+
+MariaDB [(none)]> create database sentry default character set utf8 default collate utf8_general_ci;
+MariaDB [(none)]> grant all on sentry.* to 'sentry'@'%' identified by 'password';
+
+MariaDB [(none)]> create database nav default character set utf8 default collate utf8_general_ci;
+MariaDB [(none)]> grant all on nav.* to 'nav'@'%' identified by 'password';
+
+MariaDB [(none)]> create database navms default character set utf8 default collate utf8_general_ci;
+MariaDB [(none)]> grant all on navms.* to 'navms'@'%' identified by 'password';
+
+MariaDB [(none)]> create database oozie default character set utf8 default collate utf8_general_ci;
+MariaDB [(none)]> grant all on oozie.* to 'oozie'@'%' identified by 'password';
+~~~
+
+~~~
+MariaDB [(none)]> SHOW DATABASES;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| amon               |
+| hue                |
+| metastore          |
+| mysql              |
+| nav                |
+| navms              |
+| oozie              |
+| performance_schema |
+| rman               |
+| scm                |
+| sentry             |
++--------------------+
+~~~
+
+### Preparing the Cloudera Manager Server Database
+~~~
+[sunmin@localhost ~]$ sudo /usr/share/cmf/schema/scm_prepare_database.sh mysql scm scm
+Enter SCM password: 
+JAVA_HOME=/usr/lib/jvm/jre-openjdk
+Verifying that we can write to /etc/cloudera-scm-server
+Creating SCM configuration file in /etc/cloudera-scm-server
+Executing:  /usr/lib/jvm/jre-openjdk/bin/java -cp /usr/share/java/mysql-connector-java.jar:/usr/share/java/oracle-connector-java.jar:/usr/share/java/postgresql-connector-java.jar:/usr/share/cmf/schema/../lib/* com.cloudera.enterprise.dbutil.DbCommandExecutor /etc/cloudera-scm-server/db.properties com.cloudera.cmf.db.
+[                          main] DbCommandExecutor              INFO  Successfully connected to database.
+All done, your SCM database is configured correctly!
+
+# If it exists, remove the embedded PostgreSQL properties file:
+sudo rm /etc/cloudera-scm-server/db.mgmt.properties
+~~~
+
+### Start Cloudera Manager Server
+~~~
+[sunmin@localhost ~]$ sudo systemctl start cloudera-scm-server
+
+web : http://localhost:7180 접속
+~~~
+
+### cloudera 화면 확인
+<img width="869" alt="web" src="https://user-images.githubusercontent.com/17976251/60519474-966fcd80-9d1e-11e9-8fde-cdd59c1055a7.png">
+
+---
 
 ### Update parameter
 https://aws.amazon.com/ko/premiumsupport/knowledge-center/ec2-password-login/
@@ -161,4 +326,15 @@ m1
 
 # n1, n2 에서도 동일한 작업 진행
 ~~~
+
+
+
+
+
+
+
+etc.
+Loaded plugins: fastestmirror, langpacks
+Loading mirror speeds from cached hostfile
+
 

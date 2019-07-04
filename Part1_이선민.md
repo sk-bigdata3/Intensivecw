@@ -2,7 +2,7 @@
 
 
 #### 참고 웹 사이트  
-https://victorydntmd.tistory.com/212?category=704005
+https://victorydntmd.tistory.com/212?category=704005  
 https://www.cloudera.com/documentation/enterprise/5-15-x/topics/configure_cm_repo.html
 
 ### check ip 

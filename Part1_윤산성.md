@@ -183,3 +183,70 @@ http://publicIp:7180
 # 8
 ![](./Images/setup_8.png)
 
+# TO DO
+
+# Add Training User and wheel group (all server)
+~~~
+adduser training 
+passwd training 
+usermod -aG wheel training
+~~~
+
+![](./Images/todo_1.png)
+
+# Login Hue - Using web UI
+~~~
+training / training 으로 로그인
+~~~
+# 윈도우 파일 리눅스로 옮기기
+~~~
+CMD실행 후 파일이 존재하는 경로로 이동 다음 명령 실행 (CM과 D1에 작업)
+
+pscp.exe authors.sql training@15.164.143.42:/home/training 
+pscp.exe posts.sql training@15.164.143.42:/home/training
+~~~
+
+# 데이터베이스 생성
+~~~
+mysql -u root -p 
+ 
+CREATE DATABASE test; 
+SHOW DATABASES; 
+EXIT;
+~~~
+# 테이블 생성
+~~~
+use test 
+source posts.sql 
+source authors.sql
+~~~
+![](./Images/todo_2.png)
+# db training user add (cm)
+~~~
+mysql -u root -p
+GRANT ALL ON *.* TO 'training'@'%' IDENTIFIED BY 'training'; 
+FLUSH PRIVILEGES; 
+EXIT;
+~~~
+# Sqoop --> Hive
+~~~
+sqoop import \ 
+--connect jdbc:mysql://cm/test \ 
+--username training --password training \ 
+--table posts \ 
+--hive-import 
+ 
+sqoop import \ 
+--connect jdbc:mysql://cm/test \ 
+--username training --password training \ 
+--table authors \ 
+--hive-import
+
+~~~
+
+![](./Images/todo_3.png)
+
+
+## End Of File
+
+

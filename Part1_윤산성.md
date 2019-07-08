@@ -6,8 +6,9 @@ https://supdev.tistory.com/22
 
 private key(ppk,pem)를 이용하여 ssh접근하기
 puttygen 이용하여 pem->ppk 변환
-![0.generate_ppk](./Images/0.generate_ppk.png)
-
+~~~
+![](./Images/0.generate_ppk.png)
+~~~
 출처: https://zeddios.tistory.com/34 [ZeddiOS]
 auth > browse 에서 ppk 파일 선택
 putty 에서 ssh 로 접속
@@ -65,6 +66,9 @@ sudo vi /etc/ssh/sshd_config
   sudo systemctl restart sshd.service
 ~~~
 
+
+![](./Images/1. Setup a password for centos (all server).png)
+
 ## Conﬁgure repository (cm)
 ~~~
 sudo yum install -y wget 
@@ -79,16 +83,19 @@ sudo rpm --import https://archive.cloudera.com/cm5/redhat/7/x86_64/cm/RPM-GPG-KE
 ~~~
 sudo yum install -y cloudera-manager-daemons cloudera-manager-server
 ~~~
+![](./Images/2. Conﬁgure repository (cm).png)
+![](./Images/3. Conﬁgure repository (cm).png)
 
 ## Installing the JDK Using Cloudera Manager (cm)
 ~~~
 sudo yum install -y oracle-j2sdk1.7
 ~~~
-
+![](./Images/4. Installing the JDK Using Cloudera Manager (cm).png)
 ## Installing MariaDB Server (cm)
 ~~~
 sudo yum install -y mariadb-server
 ~~~
+![](./Images/5. Installing MariaDB Server (cm).png)
 
 ## Conﬁguring and Starting the MariaDB Server (cm)
 ~~~
@@ -104,6 +111,8 @@ sudo systemctl start mariadb
 ~~~
 sudo /usr/bin/mysql_secure_installation
 ~~~
+![](./Images/6. Maria DB Password Setting (cm).png)
+
 ## Installing the MySQL JDBC Driver for MariaDB (all server)
 install all node
 ~~~
@@ -115,6 +124,8 @@ sudo mkdir -p /usr/share/java/
 cd mysql-connector-java-5.1.46 
 sudo cp mysql-connector-java-5.1.46-bin.jar /usr/share/java/mysql-connector-java.jar
 ~~~
+![](./Images/7. Installing the MySQL JDBC Driver for MariaDB (all server).png)
+
 ## 계정 및 Database 생성
 ~~~
 mysql -u root -p 
@@ -144,6 +155,7 @@ FLUSH PRIVILEGES;
 SHOW DATABASES; 
 EXIT;
 ~~~
+![](./Images/8. 계정 및 Database 생성.png)
 
 ## Setup the CM database (cm)
 ~~~
@@ -155,3 +167,21 @@ sudo systemctl start cloudera-scm-server
 ~~~
 http://publicIp:7180
 ~~~
+
+# 1
+![](./Images/setup_1.png)
+# 2
+![](./Images/setup_2.png)
+# 3
+![](./Images/setup_3.png)
+# 4
+![](./Images/setup_4.png)
+# 5
+![](./Images/setup_5.png)
+# 6
+![](./Images/setup_6.png)
+# 7
+![](./Images/setup_7.png)
+# 8
+![](./Images/setup_8.png)
+

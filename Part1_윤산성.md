@@ -6,6 +6,9 @@ https://supdev.tistory.com/22
 
 private key(ppk,pem)를 이용하여 ssh접근하기
 puttygen 이용하여 pem->ppk 변환
+![0. generate_ppk](./Images/0. generate_ppk.png)
+
+출처: https://zeddios.tistory.com/34 [ZeddiOS]
 auth > browse 에서 ppk 파일 선택
 putty 에서 ssh 로 접속
 * ec2 redhat 접속 계정 : ec2-user

@@ -67,7 +67,7 @@ sudo vi /etc/ssh/sshd_config
 ~~~
 
 
-![](./Images/1. Setup a password for centos (all server).png)
+![](./Images/1.Setup_a_password_for_centos_(all_server).png)
 
 ## Conﬁgure repository (cm)
 ~~~

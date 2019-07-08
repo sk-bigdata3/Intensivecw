@@ -1,0 +1,99 @@
+Disable SELinux
+# vi /etc/sysconfig/selinux
+SELINUX=disabled 설정
+
+/etc/hosts setting
+# vi /etc/hosts
+[ip] [hostsname] ...
+
+
+Hostname modification for each nodes
+# hostnamectl set-hostname taco
+# scp /etc/hosts root@hostname1:/etc/hosts
+# scp /etc/hosts root@hostname2:/etc/hosts
+# scp /etc/hosts root@hostname3:/etc/hosts
+
+
+sshd_config setting for each node
+# ssh-keygen -t rsa
+-id_rsa.pub > authorized_keys 생성 후 각 노드에 복사
+
+
+install dependencies using yum
+
+
+NTP setting
+# yum install -y ntp
+각 노드에서 # vi /etc/ntp.conf
+server master.node
+# chkconfig ntpd on
+# /etc/init.d/ntpd start
+
+Repository settings for CDH 5.15 installation
+-repo file download (https://www.cloudera.com/documentation/enterprise/release-notes/topics/cm_vd.html#concept_k44_z2j_34)
+
+# rpm --import https://archive.cloudera.com/cm5/redhat/7/x86_64/cm/RPM-GPG-KEY-cloudera
+
+# yum install cloudera-manager-daemons cloudera-manager-server cloudera-manager-server-db-2 -y
+
+# service cloudera-scm-server-db start
+# service cloudera-scm-server start
+
+
+MariaDB Installation / DB setting modification
+# yum install -y mariadb-server
+# yum install -y oracle-j2sdk1.7
+
+MySQL Connector / JDK file download for each node 
+
+
+if the reason for each step is specified, additional points
+
+
+
+create user training on HDFS and Linux for each node
+# adduser training
+# hdfs dfs -mkdir /user/training
+
+Make tables on Mysql Using the data in all.zip file
+
+
+Import data from mysql to hdfs using sqoop
+# sqoop import \
+  --connect jdbc:mysql://loclhost:7777/db?zeroDateTimeBehavior=convertToNull \
+  --username scott \
+  --password tiger \
+  --query 'select * from sample_table WHERE $CONDITIONS' \
+  --split-by column3 \
+  --target-dir hdfs://localhost/user/hadoop/
+
+
+create tables using hive of impala
+
+
+part1
+List the Linux release you are using
+# cat /etc/redhat-release
+# uname -a
+
+List the file system capacity for the first node
+# df -Ph
+
+List the command and output for yum repolist enabled
+# yum repolist enabled
+
+Create user training and group skcc
+# adduser training
+# groupadd skcc
+# gpasswd -a training skcc
+
+List output of the following commands : getnet group skcc / passwd training
+# getnet group skcc -> 오류
+# getent group skcc -> skcc:x:1001:training
+# passwd training -> training 패스워드 설정
+
+Date Handling using Hive / Impala and sqoop
+> CREATE EXTERNAL TABLE author ( c1 int, c2 string .. ) 
+> CREATE TABLE posts (c1 int, c2 string) ;
+
+

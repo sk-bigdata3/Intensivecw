@@ -65,8 +65,6 @@ sudo vi /etc/ssh/sshd_config
   change -> PasswordAuthentication yes 
   sudo systemctl restart sshd.service
 ~~~
-
-
 ![](./Images/1.Setup_a_password_for_centos_(all_server).png)
 
 ## Conﬁgure repository (cm)
@@ -83,19 +81,19 @@ sudo rpm --import https://archive.cloudera.com/cm5/redhat/7/x86_64/cm/RPM-GPG-KE
 ~~~
 sudo yum install -y cloudera-manager-daemons cloudera-manager-server
 ~~~
-![](./Images/2. Conﬁgure repository (cm).png)
-![](./Images/3. Conﬁgure repository (cm).png)
+![](./Images/2.Conﬁgure_repository_(cm).png)
+![](./Images/3.Conﬁgure_repository_(cm).png)
 
 ## Installing the JDK Using Cloudera Manager (cm)
 ~~~
 sudo yum install -y oracle-j2sdk1.7
 ~~~
-![](./Images/4. Installing the JDK Using Cloudera Manager (cm).png)
+![](./Images/4.Installing_the_JDK_Using_Cloudera_Manager_(cm).png)
 ## Installing MariaDB Server (cm)
 ~~~
 sudo yum install -y mariadb-server
 ~~~
-![](./Images/5. Installing MariaDB Server (cm).png)
+![](./Images/5.Installing_MariaDB_Server_(cm).png)
 
 ## Conﬁguring and Starting the MariaDB Server (cm)
 ~~~
@@ -111,7 +109,7 @@ sudo systemctl start mariadb
 ~~~
 sudo /usr/bin/mysql_secure_installation
 ~~~
-![](./Images/6. Maria DB Password Setting (cm).png)
+![](./Images/6.Maria_DB_Password_Setting_(cm).png)
 
 ## Installing the MySQL JDBC Driver for MariaDB (all server)
 install all node
@@ -124,7 +122,7 @@ sudo mkdir -p /usr/share/java/
 cd mysql-connector-java-5.1.46 
 sudo cp mysql-connector-java-5.1.46-bin.jar /usr/share/java/mysql-connector-java.jar
 ~~~
-![](./Images/7. Installing the MySQL JDBC Driver for MariaDB (all server).png)
+![](./Images/7.Installing_the_MySQL_JDBC_Driver_for_MariaDB_(all_server).png)
 
 ## 계정 및 Database 생성
 ~~~
@@ -155,7 +153,7 @@ FLUSH PRIVILEGES;
 SHOW DATABASES; 
 EXIT;
 ~~~
-![](./Images/8. 계정 및 Database 생성.png)
+![](./Images/8.계정_및_Database_생성.png)
 
 ## Setup the CM database (cm)
 ~~~

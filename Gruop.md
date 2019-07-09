@@ -76,6 +76,20 @@ sudo status sshd.service
 
 
 ### Install dependencies using yum
+uilt에만 설치하는 것 같지만 혹시 몰라서 5대 모두에 설치했음  
+시간 오래걸림
+
+~~~
+sudo yum update
+sudo yum install -y wget
+
+# 전체 y 선택
+~~~
+
+* yum update/install wget 완료  
+![5-1](https://user-images.githubusercontent.com/17976251/60865622-5e5a1480-a261-11e9-9c34-6d13b7d39dd1.JPG)
+
+
 
 ### Ntp setting
 

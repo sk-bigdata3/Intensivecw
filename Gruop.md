@@ -60,6 +60,19 @@ hostname
 
 ### sshd_config setting for each node
 
+SSH를 사용하여 EC2 인스턴스에 로그인할 때 키 페어 대신에 암호 로그인을 활성화  
+패스워드 인증 허용
+~~~
+sudo vi /etc/ssh/sshd_config
+# PasswordAuthentication -> yes 로 변경 후 저장
+
+sudo systemctl restart sshd.service
+~~~
+
+* PasswordAuthentication -> yes 로 변경  
+![4-1](https://user-images.githubusercontent.com/17976251/60864724-5e591500-a25f-11e9-86b7-30877be269a1.JPG)
+
+
 ### Install dependencies using yum
 
 ### Ntp setting

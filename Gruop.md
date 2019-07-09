@@ -286,8 +286,9 @@ https://keichee.tistory.com/11
 vi ~/.bash_profile
 
 # 아래 두줄 추가
+
 export JAVA_HOME=/usr/java/jdk1.7.0_67-cloudera
-export PATH=$PATH:/usr/java/jdk1.7.0_67-cloudera/bin
+export PATH=/usr/java/jdk1.7.0_67-cloudera/bin:$PATH
 
 source ~/.bash_profile
 

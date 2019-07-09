@@ -40,7 +40,13 @@ sudo vi /etc/hosts
 172.31.6.188 dn1.cdhcluster.com dn1
 172.31.2.189 dn2.cdhcluster.com dn2
 172.31.14.162 dn3.cdhcluster.com dn3
+~~~
 
+* vi /etc/hosts 파일 변경
+![2-1](https://user-images.githubusercontent.com/17976251/60864294-26050700-a25e-11e9-9d7d-a79b922005e2.JPG)
+
+### Hostname modification for each node
+~~~
 # 각각의 node
 sudo hostnamectl set-hostname <노드별명>
 예) sudo hostnamectl set-hostname mn1
@@ -49,14 +55,8 @@ sudo hostnamectl set-hostname <노드별명>
 hostname
 ~~~
 
-* vi /etc/hosts 파일 변경
-![2-1](https://user-images.githubusercontent.com/17976251/60864294-26050700-a25e-11e9-9d7d-a79b922005e2.JPG)
-
 * 변경된 hostname 확인  
 ![2-2](https://user-images.githubusercontent.com/17976251/60864323-3ae19a80-a25e-11e9-8c66-72121db448a9.JPG)
-
-
-### Hostname modification for each node
 
 ### sshd_config setting for each node
 

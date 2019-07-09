@@ -8,7 +8,8 @@ ssh -i ./pem파일이름 계정명@ip
 ## Pre-qualification
 
 ### DIsable SELinux
-
+~~~
+~~~
 ### /etc/hosts/setting
 
 ### Hostname modification for each node

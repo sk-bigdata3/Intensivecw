@@ -127,7 +127,13 @@ ntpq -p
 ![6-3](https://user-images.githubusercontent.com/17976251/60866988-bb0afe80-a264-11e9-8c17-25f28d7ff71d.JPG)
 
 
-### Repository settings for CDH 5.15 installation
+### Repository settings for CDH 5.15 installation (util node에서 진행)
+
+~~~
+
+sudo rpm --import https://archive.cloudera.com/cm5/redhat/7/x86_64/cm/RPM-GPG-KEY-cloudera
+
+~~~
 
 ### MariaDB Installation / DB Setting modification
 
@@ -136,6 +142,8 @@ ntpq -p
 ### If the reason for each step is specified, additional points
 
 ## CM settings on Web UI
+
+https://www.cloudera.com/documentation/enterprise/5-15-x/topics/cm_ig_host_allocations.html#host_role_assignments
 
 ### Select appropricate Hadoop Services (Core+Impala)
 

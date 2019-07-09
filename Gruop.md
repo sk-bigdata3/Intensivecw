@@ -265,14 +265,14 @@ Thanks for using MariaDB!
 ![8-1-successmaria](https://user-images.githubusercontent.com/17976251/60867981-f6a6c800-a266-11e9-80dc-47493fc71dbd.JPG)
 
 
-### MySQL Connector / JDK file download for each node
+### MySQL Connector / JDK file download for each node (중요!!!!!!!!!!!@@)
 
-#### jdk 설치 : util만?
+#### jdk 설치
 ```
 [centos@util ~]$ sudo yum install oracle-j2sdk1.7
 ```
 
-#### java version 확인 : util만?
+#### java version 확인
 ```
 [centos@util ~]$ java -version
 openjdk version "1.8.0_181"
@@ -280,7 +280,7 @@ OpenJDK Runtime Environment (build 1.8.0_181-b13)
 OpenJDK 64-Bit Server VM (build 25.181-b13, mixed mode)
 ```
 
-* -bash: java: command not found 에러 처리  
+* -bash: java 경로잡기
 https://keichee.tistory.com/11
 ~~~
 vi ~/.bash_profile
@@ -288,6 +288,7 @@ vi ~/.bash_profile
 # 아래 두줄 추가
 
 export JAVA_HOME=/usr/java/jdk1.7.0_67-cloudera
+# :$PATH가 뒤에 있어야 java -version 했을 때 정상적인 버전이 뜬다. (*)
 export PATH=/usr/java/jdk1.7.0_67-cloudera/bin:$PATH
 
 source ~/.bash_profile
@@ -449,11 +450,57 @@ admin / admin
 
 https://www.cloudera.com/documentation/enterprise/5-15-x/topics/cm_ig_host_allocations.html#host_role_assignments
 
+#### 클러스터 삭제 후 재설치 시
+* 에러 화면  
+![위기2](https://user-images.githubusercontent.com/17976251/60882051-054ea880-a282-11e9-8266-7f38e33303dd.JPG)
+
+1) 클러스터 삭제  
+2) 호스트 > 모든 호스트 > 전체 삭제  
+3) 클러스터 설치 진행 중에 폴더명 변경 (예: nn -> nn1)  
+폴더명을 바꿔주지 않으면 중복되어 에러 발생! 
+
 ### Select appropricate Hadoop Services (Core+Impala)
+1.  
+![10-1](https://user-images.githubusercontent.com/17976251/60882157-40e97280-a282-11e9-9fc0-acda6192153f.JPG)
+
+2.  
+![10-2](https://user-images.githubusercontent.com/17976251/60882163-42b33600-a282-11e9-9369-ce137f775d61.JPG)  
+
+3.변경 없음  
+![10-3-변경없음](https://user-images.githubusercontent.com/17976251/60882170-447cf980-a282-11e9-8a66-b464bd71d21d.JPG)  
+
+4.jdk 설치 체크 x  
+![10-3-jdk설치안함](https://user-images.githubusercontent.com/17976251/60882176-4a72da80-a282-11e9-96f6-3acb41ffec6d.JPG)
+
+5.single mode 체크 x
+![10-5-singlemode안함](https://user-images.githubusercontent.com/17976251/60882271-755d2e80-a282-11e9-8a6e-88f2d0d60aa8.JPG)
+
+6.id/pw 설정
+* 모든 노드들에 비밀번호가 공통으로 설정되어 있어야 함.
+![10-6](https://user-images.githubusercontent.com/17976251/60882276-7726f200-a282-11e9-8ff7-223990e084a5.JPG)
+
+7.
+![10-7-올라감](https://user-images.githubusercontent.com/17976251/60882360-ab9aae00-a282-11e9-853e-aa598a5e58e0.JPG)  
+![10-8](https://user-images.githubusercontent.com/17976251/60882365-ad647180-a282-11e9-8e2b-c334482e2726.JPG)  
+![10-9-버전확인](https://user-images.githubusercontent.com/17976251/60882374-b2c1bc00-a282-11e9-9492-00a665ca2e1e.JPG)  
+
+8.Core 3개 설치  
+![10-10-초기3개설치](https://user-images.githubusercontent.com/17976251/60882404-c79e4f80-a282-11e9-9152-46eaa0aefa35.JPG)
+
+9.클러스터 설정
+![10-11-클러스터설정(2)](https://user-images.githubusercontent.com/17976251/60882409-c9681300-a282-11e9-922b-3e710aa7d653.JPG)  
+![10-12-변경없음](https://user-images.githubusercontent.com/17976251/60882410-ca00a980-a282-11e9-9ebe-7c2f726f44e1.JPG)  
+![10-13-완료](https://user-images.githubusercontent.com/17976251/60882417-ca994000-a282-11e9-823f-7f98daf04c25.JPG)
+
 
 ### Assign roles on correct nodes
 
+![10-11-클러스터설정](https://user-images.githubusercontent.com/17976251/60882134-329b5680-a282-11e9-832d-00e1b7477a83.JPG)
+
+
 ### Screenshot of CM main page with green marks for all services
+
+![끝](https://user-images.githubusercontent.com/17976251/60881899-b0129700-a281-11e9-8aba-faf10e7a184f.JPG)
 
 ### Install sqoop service
 

@@ -426,12 +426,17 @@ MariaDB [(none)]> show databases;
 ## CM settings on Web UI
 
 #### CM 초기화면 Login
+(중요)
 ```
-
 C:\Windows\System32\drivers\etc > hosts 파일 메모장에서 편집
 15.164.82.177 cm.com cm <- 퍼블릭IP 로 도메인 추가
 
 
+#모든 Node에 비밀번호 설정
+sudo passwd centos
+```
+
+```
 http://<util의 public ip>:7180
 admin / admin
 - trial 선택

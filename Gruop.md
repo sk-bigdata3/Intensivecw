@@ -1,5 +1,3 @@
-Group
-
 
 ```
 ssh -i ./pem파일이름 계정명@ip
@@ -16,6 +14,7 @@ SELINUX=enforcing 을 SELINUX=disabled 로 변경후 저장한다.
 #selinux 활성화 여부 확인
 getenforce 
 
+#Root 계정으로 변경
 sudo -i
 reboot
 

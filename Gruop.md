@@ -162,6 +162,100 @@ baseurl=https://archive.cloudera.com/cm5/redhat/6/x86_64/cm/5.15.2/
 
 ### MariaDB Installation / DB Setting modification
 
+
+* repository 먼저 확인
+* yum 설정은 yum.conf 에서 하고있으며, yum.repos.d 에 있는 파일에 지정된 서버주소로부터 패키지들을 설치하고 관리할 수 있음
+```
+[centos@util ~]$ grep -i exclude /etc/yum.conf /etc/yum.repos.d/*
+[centos@util ~]$ yum repolist all
+
+```
+### util 에 maria db 설치
+```
+[centos@util ~]$ sudo yum install -y mariadb-server
+```
+
+### mariadb 내렸다가 재시작
+```
+[centos@util ~]$ sudo systemctl enable mariadb
+Created symlink from /etc/systemd/system/multi-user.target.wants/mariadb.service to /usr/lib/systemd/system/mariadb.service.
+[centos@util ~]$ sudo systemctl start mariadb
+```
+
+### mariadb 권한 설정
+* 전체 Y 선택
+```
+- 참고 url : https://www.cloudera.com/documentation/enterprise/5-15-x/topics/cm_ig_installing_configuring_dbs.html
+[centos@util ~]$ sudo /usr/bin/mysql_secure_installation
+
+NOTE: RUNNING ALL PARTS OF THIS SCRIPT IS RECOMMENDED FOR ALL MariaDB
+      SERVERS IN PRODUCTION USE!  PLEASE READ EACH STEP CAREFULLY!
+
+In order to log into MariaDB to secure it, we'll need the current
+password for the root user.  If you've just installed MariaDB, and
+you haven't set the root password yet, the password will be blank,
+so you should just press enter here.
+
+Enter current password for root (enter for none):
+OK, successfully used password, moving on...
+
+Setting the root password ensures that nobody can log into the MariaDB
+root user without the proper authorisation.
+
+You already have a root password set, so you can safely answer 'n'.
+
+* password 설정
+
+Change the root password? [Y/n] Y
+New password:
+Re-enter new password:
+Password updated successfully!
+Reloading privilege tables..
+ ... Success!
+
+By default, a MariaDB installation has an anonymous user, allowing anyone
+to log into MariaDB without having to have a user account created for
+them.  This is intended only for testing, and to make the installation
+go a bit smoother.  You should remove them before moving into a
+production environment.
+
+Remove anonymous users? [Y/n] n
+ ... skipping.
+
+Normally, root should only be allowed to connect from 'localhost'.  This
+ensures that someone cannot guess at the root password from the network.
+
+* 원격접속여부
+Disallow root login remotely? [Y/n] Y
+ ... Success!
+
+By default, MariaDB comes with a database named 'test' that anyone can
+access.  This is also intended only for testing, and should be removed
+before moving into a production environment.
+
+* test db삭제여부
+Remove test database and access to it? [Y/n] Y
+ ... skipping.
+
+Reloading the privilege tables will ensure that all changes made so far
+will take effect immediately.
+
+* 지금까지설정한 권한정보 적용여부
+Reload privilege tables now? [Y/n] Y
+ ... Success!
+
+Cleaning up...
+
+All done!  If you've completed all of the above steps, your MariaDB
+installation should now be secure.
+
+Thanks for using MariaDB!
+```
+
+* Maria DB 설치 완료  
+![8-1-successmaria](https://user-images.githubusercontent.com/17976251/60867981-f6a6c800-a266-11e9-80dc-47493fc71dbd.JPG)
+
+
 ### MySQL Connector / JDK file download for each node
 
 ### If the reason for each step is specified, additional points

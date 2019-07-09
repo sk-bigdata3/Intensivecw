@@ -388,8 +388,58 @@ Query OK, 0 rows affected (0.01 sec)
 * MariaDB에 db,user 생성 완료  
 ![9-1-successdb](https://user-images.githubusercontent.com/17976251/60871178-31abfa00-a26d-11e9-852f-30261f3769f7.JPG)
 
+#### db 생성 확인
+
+~~~
+MariaDB [(none)]> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| aman               |
+| hue                |
+| metastore          |
+| mysql              |
+| oozie              |
+| performance_schema |
+| rman               |
+| scm                |
+| sentry             |
++--------------------+
+10 rows in set (0.00 sec)
+~~~
+
+#### setup CM DB
+```
+# 명령어 날리는 현재 디렉터리 위치 상관없음
+[root@util cloudera-scm-server]# sudo /usr/share/cmf/schema/scm_prepare_database.sh mysql scm scm-user password
+```
+
+#### server start, log로 서버 올라가는것 확인
+```
+[root@util cloudera-scm-server]# sudo systemctl start cloudera-scm-server
+[root@util cloudera-scm-server]# sudo tail -f /var/log/cloudera-scm-server/cloudera-scm-server.log
+```
 
 ## CM settings on Web UI
+
+#### CM 초기화면 Login
+```
+http://<util의 public ip>:7180
+admin / admin
+- trial 선택
+- 화면상에 Could not connect to host. 라고 보이는 경우 ssh server가 제대로 설치되었는지 재 확인
+# sudo yum install openssh-server
+# /sbin/service sshd status
+# /sbin/service sshd start
+# ssh localhost
+```
+* 서버 재시작 시
+```
+# service cloudera-scm-server restart
+# service cloudera-scm-agent restart
+# sudo systemctl start cloudera-scm-server
+```
 
 https://www.cloudera.com/documentation/enterprise/5-15-x/topics/cm_ig_host_allocations.html#host_role_assignments
 

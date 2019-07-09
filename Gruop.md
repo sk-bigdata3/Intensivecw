@@ -106,6 +106,12 @@ server kr.pool.ntp.org
 server time.bora.net 
 server time.kornet.net
 
+위 주소가 안될 경우, 아래 주소로 추가해서 해볼 것
+server 0.asia.pool.ntp.org
+server 1.asia.pool.ntp.org
+server 2.asia.pool.ntp.org
+server 3.asia.pool.ntp.org
+서버 주소는 http://www.pool.ntp.org/ 에서 확인 가능
 
 sudo chkconfig ntpd on
 sudo systemctl start ntpd

@@ -98,10 +98,11 @@ https://webdir.tistory.com/120?category=607029
 sudo yum install ntp
 
 sudo vi /etc/ntp.conf
-# 내용 변경 : 위에 세줄 주석처리, 아래 세줄 추가
+# 내용 변경 : 위에 네줄 주석처리, 아래 세줄 추가
 #server 0.centos.pool.ntp.org 
 #server 1.centos.pool.ntp.org 
 #server 2.centos.pool.ntp.org 
+#server 3.centos.pool.ntp.org 
 server kr.pool.ntp.org 
 server time.bora.net 
 server time.kornet.net
@@ -119,7 +120,11 @@ sudo systemctl start ntpd
 ntpq -p
 ~~~
 
-* ntpd 실행 성공 확인
+* ntp 설치 성공  
+![6-1-ntpinstall](https://user-images.githubusercontent.com/17976251/60867034-d413af80-a264-11e9-93dd-f2eab7744300.JPG)
+
+* ntpd 실행 성공 확인  
+![6-3](https://user-images.githubusercontent.com/17976251/60866988-bb0afe80-a264-11e9-8c17-25f28d7ff71d.JPG)
 
 
 ### Repository settings for CDH 5.15 installation

@@ -2,6 +2,8 @@
 ```
 ssh -i ./pem파일이름 계정명@ip
 ```
+* putty 설정
+![puttyconf](https://user-images.githubusercontent.com/52270521/60864156-b4c55400-a25d-11e9-963a-f7f13d9265db.PNG)
 
 ## Pre-qualification
 

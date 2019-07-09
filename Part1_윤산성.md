@@ -114,6 +114,7 @@ sudo /usr/bin/mysql_secure_installation
 ## Installing the MySQL JDBC Driver for MariaDB (all server)
 install all node
 ~~~
+sudo yum install -y wget 
 sudo wget https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-5.1.46.tar.gz 
 ~~~
 ~~~

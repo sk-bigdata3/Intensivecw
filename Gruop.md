@@ -31,6 +31,31 @@ reboot
 
 ### /etc/hosts/setting
 
+~~~
+sudo vi /etc/hosts
+
+# 아래와 같이 내용 추가 private ip <모든 node>
+172.31.11.29 mn1.cdhcluster.com mn1
+172.31.8.22 util1.cdhcluster.com util1
+172.31.6.188 dn1.cdhcluster.com dn1
+172.31.2.189 dn2.cdhcluster.com dn2
+172.31.14.162 dn3.cdhcluster.com dn3
+
+# 각각의 node
+sudo hostnamectl set-hostname <노드별명>
+예) sudo hostnamectl set-hostname mn1
+
+# 변경된 hostname 확인
+hostname
+~~~
+
+* vi /etc/hosts 파일 변경
+![2-1](https://user-images.githubusercontent.com/17976251/60864294-26050700-a25e-11e9-9d7d-a79b922005e2.JPG)
+
+* 변경된 hostname 확인  
+![2-2](https://user-images.githubusercontent.com/17976251/60864323-3ae19a80-a25e-11e9-8c66-72121db448a9.JPG)
+
+
 ### Hostname modification for each node
 
 ### sshd_config setting for each node

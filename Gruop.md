@@ -14,7 +14,7 @@ sudo vi /etc/sysconfig/selinux
 SELINUX=enforcing 을 SELINUX=disabled 로 변경후 저장한다.
 
 #selinux 활성화 여부 확인
-getenforce 
+getenforce
 
 #Root 계정으로 변경
 sudo -i
@@ -100,12 +100,12 @@ sudo yum install ntp
 
 sudo vi /etc/ntp.conf
 # 내용 변경 : 위에 네줄 주석처리, 아래 세줄 추가
-#server 0.centos.pool.ntp.org 
-#server 1.centos.pool.ntp.org 
-#server 2.centos.pool.ntp.org 
-#server 3.centos.pool.ntp.org 
-server kr.pool.ntp.org 
-server time.bora.net 
+#server 0.centos.pool.ntp.org
+#server 1.centos.pool.ntp.org
+#server 2.centos.pool.ntp.org
+#server 3.centos.pool.ntp.org
+server kr.pool.ntp.org
+server time.bora.net
 server time.kornet.net
 
 위 주소가 안될 경우, 아래 주소로 추가해서 해볼 것
@@ -453,7 +453,6 @@ admin / admin
 # sudo systemctl start cloudera-scm-server
 ```
 
-https://www.cloudera.com/documentation/enterprise/5-15-x/topics/cm_ig_host_allocations.html#host_role_assignments
 
 #### 클러스터 삭제 후 재설치 시
 * 에러 화면  
@@ -462,7 +461,7 @@ https://www.cloudera.com/documentation/enterprise/5-15-x/topics/cm_ig_host_alloc
 1) 클러스터 삭제  
 2) 호스트 > 모든 호스트 > 전체 삭제  
 3) 클러스터 설치 진행 중에 폴더명 변경 (예: nn -> nn1)  
-폴더명을 바꿔주지 않으면 중복되어 에러 발생! 
+폴더명을 바꿔주지 않으면 중복되어 에러 발생!
 
 ### Select appropricate Hadoop Services (Core+Impala)
 1.  
@@ -498,8 +497,30 @@ https://www.cloudera.com/documentation/enterprise/5-15-x/topics/cm_ig_host_alloc
 ![10-13-완료](https://user-images.githubusercontent.com/17976251/60882417-ca994000-a282-11e9-823f-7f98daf04c25.JPG)
 
 
-### Assign roles on correct nodes
-
+### Assign roles on correct nodes  
+https://www.cloudera.com/documentation/enterprise/5-15-x/topics/cm_ig_host_allocations.html#host_role_assignments
+```
+1) Cloudera Management Service 관련 서비스
+   모두 util01
+2) oozie
+   util01
+3) yarn
+   RM -> master
+   JobHistory -> data01
+   Nodemanager -> DataNode 3대
+4) zookeeper
+   data01,data02,master
+5) hive
+   gateway -> 5대 전부
+   metastore -> data01
+   hiveServer2 -> data01
+6) hue
+   전부 util01
+7) hdfs
+   datanode -> data01,02,03
+   namenode -> master
+   secondary namenode -> util01
+```
 ![10-11-클러스터설정](https://user-images.githubusercontent.com/17976251/60882134-329b5680-a282-11e9-832d-00e1b7477a83.JPG)
 
 

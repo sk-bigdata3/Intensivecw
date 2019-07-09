@@ -148,6 +148,11 @@ Saving to: ‘/etc/yum.repos.d/cloudera-manager.repo’
 2019-06-30 12:45:17 (13.2 MB/s) - ‘/etc/yum.repos.d/cloudera-manager.repo’ saved [290/290]
 ```
 
+~~~
+# cloudera install
+[centos@util ~]$ sudo yum install cloudera-manager-daemons cloudera-manager-server
+~~~
+
 #### baseurl 수정
 ```
 [centos@util ~]$ sudo vi /etc/yum.repos.d/cloudera-manager.repo
@@ -165,24 +170,25 @@ baseurl=https://archive.cloudera.com/cm5/redhat/6/x86_64/cm/5.15.2/
 
 * repository 먼저 확인
 * yum 설정은 yum.conf 에서 하고있으며, yum.repos.d 에 있는 파일에 지정된 서버주소로부터 패키지들을 설치하고 관리할 수 있음
+< 전체 Node 에서 진행 >
 ```
 [centos@util ~]$ grep -i exclude /etc/yum.conf /etc/yum.repos.d/*
 [centos@util ~]$ yum repolist all
 
 ```
-### util 에 maria db 설치
+### maria db 설치 : util
 ```
 [centos@util ~]$ sudo yum install -y mariadb-server
 ```
 
-### mariadb 내렸다가 재시작
+### mariadb 내렸다가 재시작 : util
 ```
 [centos@util ~]$ sudo systemctl enable mariadb
 Created symlink from /etc/systemd/system/multi-user.target.wants/mariadb.service to /usr/lib/systemd/system/mariadb.service.
 [centos@util ~]$ sudo systemctl start mariadb
 ```
 
-### mariadb 권한 설정
+### mariadb 권한 설정 : util
 * 전체 Y 선택
 ```
 - 참고 url : https://www.cloudera.com/documentation/enterprise/5-15-x/topics/cm_ig_installing_configuring_dbs.html

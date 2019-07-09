@@ -425,6 +425,11 @@ MariaDB [(none)]> show databases;
 
 #### CM 초기화면 Login
 ```
+
+C:\Windows\System32\drivers\etc > hosts 파일 메모장에서 편집
+15.164.82.177 cm.com cm <- 퍼블릭IP 로 도메인 추가
+
+
 http://<util의 public ip>:7180
 admin / admin
 - trial 선택

@@ -153,6 +153,10 @@ Saving to: ‘/etc/yum.repos.d/cloudera-manager.repo’
 [centos@util ~]$ sudo yum install cloudera-manager-daemons cloudera-manager-server
 ~~~
 
+* CM 설치 완료 확인  
+![7-2-cm-success](https://user-images.githubusercontent.com/17976251/60868276-a2e8ae80-a267-11e9-97d1-1a0e048389b1.JPG)
+
+
 #### baseurl 수정
 ```
 [centos@util ~]$ sudo vi /etc/yum.repos.d/cloudera-manager.repo
@@ -167,15 +171,14 @@ baseurl=https://archive.cloudera.com/cm5/redhat/6/x86_64/cm/5.15.2/
 
 ### MariaDB Installation / DB Setting modification
 
-
 * repository 먼저 확인
 * yum 설정은 yum.conf 에서 하고있으며, yum.repos.d 에 있는 파일에 지정된 서버주소로부터 패키지들을 설치하고 관리할 수 있음
 < 전체 Node 에서 진행 >
 ```
 [centos@util ~]$ grep -i exclude /etc/yum.conf /etc/yum.repos.d/*
 [centos@util ~]$ yum repolist all
-
 ```
+
 ### maria db 설치 : util
 ```
 [centos@util ~]$ sudo yum install -y mariadb-server
@@ -264,7 +267,32 @@ Thanks for using MariaDB!
 
 ### MySQL Connector / JDK file download for each node
 
-### If the reason for each step is specified, additional points
+#### jdk 설치
+```
+[centos@util ~]$ sudo yum install oracle-j2sdk1.7
+```
+
+#### java version 확인
+```
+[centos@util ~]$ java -version
+openjdk version "1.8.0_181"
+OpenJDK Runtime Environment (build 1.8.0_181-b13)
+OpenJDK 64-Bit Server VM (build 25.181-b13, mixed mode)
+```
+
+* -bash: java: command not found 에러 처리  
+https://keichee.tistory.com/11
+~~~
+vi ~/.bash_profile
+
+# 아래 두줄 추가
+export JAVA_HOME=/usr/java/jdk1.7.0_67-cloudera
+export PATH=$PATH:/usr/java/jdk1.7.0_67-cloudera/bin
+
+source ~/.bash_profile
+
+java -version
+~~~
 
 ## CM settings on Web UI
 

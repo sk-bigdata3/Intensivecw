@@ -42,7 +42,7 @@ sudo vi /etc/hosts
 172.31.14.162 dn3.cdhcluster.com dn3
 ~~~
 
-* vi /etc/hosts 파일 변경
+* vi /etc/hosts 파일 변경  
 ![2-1](https://user-images.githubusercontent.com/17976251/60864294-26050700-a25e-11e9-9d7d-a79b922005e2.JPG)
 
 ### Hostname modification for each node
@@ -92,6 +92,29 @@ sudo yum install -y wget
 
 
 ### Ntp setting
+https://webdir.tistory.com/120?category=607029  
+
+~~~
+sudo yum install ntp
+
+sudo vi /etc/ntp.conf
+# 내용 변경 : 위에 세줄 주석처리, 아래 세줄 추가
+#server 0.centos.pool.ntp.org 
+#server 1.centos.pool.ntp.org 
+#server 2.centos.pool.ntp.org 
+server kr.pool.ntp.org 
+server time.bora.net 
+server time.kornet.net
+
+
+sudo chkconfig ntpd on
+sudo systemctl start ntpd
+# 성공 확인
+ntpq -p
+~~~
+
+* ntpd 실행 성공 확인
+
 
 ### Repository settings for CDH 5.15 installation
 

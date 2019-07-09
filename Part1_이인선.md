@@ -728,22 +728,22 @@ install은 id/pw로 할수도있고 key로 할수도 있음
 * 호스트가 꼬일 경우, install 시도 시 heartbeat error가 날 수 있음 (4번 그림)
 
 1. 호스트 지정
-![](호스트지정.PNG)
+![](./Images/호스트지정.PNG)
 2. 호스트 연결 확인
-![](호스트연결확인.PNG)
+![](./Images/호스트연결확인.PNG)
 3. 로그인 인증 (centos로 접속 시 install 이 안되서 root로 접속함)
-![](로그인인증.PNG)
+![](./Images/로그인인증.PNG)
 4. install 확인
-![](install확인.PNG)
+![](./Images/install확인.PNG)
 5. install 완료
-![](install완료.PNG)
+![](./Images/install완료.PNG)
 6. 사용자 지정 서비스 선택
-![](사용자지정서비스선택.PNG)
+![](./Images/사용자지정서비스선택.PNG)
 7. cluster setup
-![](클러스터셋업.PNG)
+![](./Images/클러스터셋업.PNG)
 8. 서비스 구성
-![](기본서비스구성.PNG)
-8. db연결 완료
-![](db연결완료.PNG)
+![](./Images/기본서비스구성.PNG)
+9. db연결 완료
+![](./Images/db연결완료.PNG)
 
 * 뒷부분은 캡처 못함. 일단 기본 클러스터/서비스(HDFS, YARN, ZOOKEEPER) 설치 완료

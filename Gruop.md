@@ -2,7 +2,7 @@
 ```
 ssh -i ./pem파일이름 계정명@ip
 ```
-* putty 설정
+* putty 설정  
 ![puttyconf](https://user-images.githubusercontent.com/52270521/60864156-b4c55400-a25d-11e9-963a-f7f13d9265db.PNG)
 
 ## Pre-qualification
@@ -66,7 +66,9 @@ SSH를 사용하여 EC2 인스턴스에 로그인할 때 키 페어 대신에 �
 sudo vi /etc/ssh/sshd_config
 # PasswordAuthentication -> yes 로 변경 후 저장
 
+# sshd 재시작 및 상태확인
 sudo systemctl restart sshd.service
+sudo status sshd.service
 ~~~
 
 * PasswordAuthentication -> yes 로 변경  

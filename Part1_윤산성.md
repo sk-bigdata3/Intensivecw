@@ -84,7 +84,7 @@ sudo yum install -y cloudera-manager-daemons cloudera-manager-server
 ![](./Images/2.Conﬁgure_repository_(cm).png)
 ![](./Images/3.Conﬁgure_repository_(cm).png)
 
-## Installing the JDK Using Cloudera Manager (cm)
+## Installing the JDK Using Cloudera Manager (all server)
 ~~~
 sudo yum install -y oracle-j2sdk1.7
 ~~~

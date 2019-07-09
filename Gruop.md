@@ -77,7 +77,8 @@ sudo status sshd.service
 
 ### Install dependencies using yum
 uilt에만 설치하는 것 같지만 혹시 몰라서 5대 모두에 설치했음  
-시간 오래걸림
+시간 오래걸림, 하나씩 차근차근 설치하는게 나을 것 같음.  
+한번에 설치 다 돌렸다가 제대로 안되면 wget 다시 설치해줘야함
 
 ~~~
 sudo yum update
@@ -169,11 +170,10 @@ baseurl=https://archive.cloudera.com/cm5/redhat/6/x86_64/cm/5.15.2/
 > https://archive.cloudera.com/cm5/redhat/7/x86_64/cm/RPM-GPG-KEY-cloudera
 ```
 
-### MariaDB Installation / DB Setting modification
+### MariaDB Installation / DB Setting modification : util
 
 * repository 먼저 확인
 * yum 설정은 yum.conf 에서 하고있으며, yum.repos.d 에 있는 파일에 지정된 서버주소로부터 패키지들을 설치하고 관리할 수 있음
-< 전체 Node 에서 진행 >
 ```
 [centos@util ~]$ grep -i exclude /etc/yum.conf /etc/yum.repos.d/*
 [centos@util ~]$ yum repolist all
@@ -267,12 +267,12 @@ Thanks for using MariaDB!
 
 ### MySQL Connector / JDK file download for each node
 
-#### jdk 설치
+#### jdk 설치 : util만?
 ```
 [centos@util ~]$ sudo yum install oracle-j2sdk1.7
 ```
 
-#### java version 확인
+#### java version 확인 : util만?
 ```
 [centos@util ~]$ java -version
 openjdk version "1.8.0_181"
@@ -293,6 +293,101 @@ source ~/.bash_profile
 
 java -version
 ~~~
+
+#### Mysql connector 설치 : 모든 Node
+
+### 모든 노드에 mysql-JDBC Connector install
+```
+[centos@util ~]$ sudo wget https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-5.1.47.tar.gz
+[centos@util ~]$ tar zxvf mysql-connector-java-5.1.47.tar.gz
+[centos@util ~]$ sudo mkdir -p /usr/share/java/
+[centos@util ~]$ cd mysql-connector-java-5.1.47
+[centos@util mysql-connector-java-5.1.47]$ sudo cp mysql-connector-java-5.1.47-bin.jar /usr/share/java/mysql-connector-java.jar
+[centos@util mysql-connector-java-5.1.47]$ cd /usr/share/java/
+[centos@util java]$ sudo yum install mysql-connector-java
+```
+
+### mysql version 확인 / login : util
+version 확인은 util만 가능
+```
+[centos@util java]$ mysql --version
+mysql  Ver 15.1 Distrib 5.5.60-MariaDB, for Linux (x86_64) using readline 5.1
+[centos@util java]$ mysql -u root -p
+Enter password:
+Welcome to the MariaDB monitor.  Commands end with ; or \g.
+Your MariaDB connection id is 19
+Server version: 5.5.60-MariaDB MariaDB Server
+
+Copyright (c) 2000, 2018, Oracle, MariaDB Corporation Ab and others.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+MariaDB [(none)]>
+
+
+MariaDB [(none)]> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| performance_schema |
++--------------------+
+3 rows in set (0.00 sec)
+
+```
+#### db, user 생성
+~~~
+MariaDB [(none)]> CREATE DATABASE scm DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
+Query OK, 1 row affected (0.02 sec)
+
+MariaDB [(none)]> GRANT ALL ON scm.* TO 'scm-user'@'%' IDENTIFIED BY 'password';
+Query OK, 0 rows affected (0.01 sec)
+
+MariaDB [(none)]> CREATE DATABASE aman DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
+Query OK, 1 row affected (0.00 sec)
+
+MariaDB [(none)]> GRANT ALL ON aman.* TO 'aman-user'@'%' IDENTIFIED BY 'password';
+Query OK, 0 rows affected (0.00 sec)
+
+MariaDB [(none)]> CREATE DATABASE rman DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
+Query OK, 1 row affected (0.00 sec)
+
+MariaDB [(none)]> GRANT ALL ON rman.* TO 'rman-user'@'%' IDENTIFIED BY 'password';
+Query OK, 0 rows affected (0.00 sec)
+
+MariaDB [(none)]>
+MariaDB [(none)]> CREATE DATABASE hue DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
+Query OK, 1 row affected (0.00 sec)
+
+MariaDB [(none)]> GRANT ALL ON hue.* TO 'hue-user'@'%' IDENTIFIED BY 'password';
+Query OK, 0 rows affected (0.00 sec)
+
+MariaDB [(none)]> CREATE DATABASE metastore DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
+Query OK, 1 row affected (0.00 sec)
+
+MariaDB [(none)]> GRANT ALL ON metastore.* TO 'metastore-user'@'%' IDENTIFIED BY 'password';
+Query OK, 0 rows affected (0.00 sec)
+
+MariaDB [(none)]> CREATE DATABASE sentry DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
+Query OK, 1 row affected (0.00 sec)
+
+MariaDB [(none)]> GRANT ALL ON sentry.* TO 'sentry-user'@'%' IDENTIFIED BY 'password';
+Query OK, 0 rows affected (0.00 sec)
+
+MariaDB [(none)]> CREATE DATABASE oozie DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
+Query OK, 1 row affected (0.00 sec)
+
+MariaDB [(none)]> GRANT ALL ON oozie.* TO 'oozie-user'@'%' IDENTIFIED BY 'password';
+Query OK, 0 rows affected (0.00 sec)
+
+MariaDB [(none)]> FLUSH PRIVILEGES;
+Query OK, 0 rows affected (0.01 sec)
+~~~
+
+* MariaDB에 db,user 생성 완료  
+![9-1-successdb](https://user-images.githubusercontent.com/17976251/60871178-31abfa00-a26d-11e9-852f-30261f3769f7.JPG)
+
 
 ## CM settings on Web UI
 

@@ -7,6 +7,15 @@ ssh -i ./pem파일이름 계정명@ip
 
 ## Pre-qualification
 
+### 해야 할 것 같은데 뭔지 모르겠어요 ~~ 
+~~~
+sudo sysctl vm.swappiness=1 sudo sh -c "echo 'vm.swappiness=1'>> /etc/sysctl.conf" 
+sudo sh -c "echo never > /sys/kernel/mm/transparent_hugepage/defrag" sudo sh -c "echo never > /sys/kernel/mm/transparent_hugepage/enabled" sudo sh -c "echo 'echo never > /sys/kernel/mm/transparent_hugepage/defrag' >> /etc/rc.local" sudo sh -c "echo 'echo never > /sys/kernel/mm/transparent_hugepage/enabled' >> /etc/rc.local" sudo cat /etc/rc.local 
+sudo sed -i 's/^\(SELINUX\s*=\s*\).*$/\1disabled/' /etc/selinux/config getenforce 
+sudo yum -y install nscd sudo systemctl enable nscd sudo systemctl start nscd sudo systemctl status nscd 
+sudo yum -y install ntp sudo chkconfig ntpd on sudo systemctl enable ntpd sudo systemctl start ntpd 
+~~~
+
 ### Disable SELinux [전체  Node]
 https://www.lesstif.com/pages/viewpage.action?pageId=6979732
 ~~~

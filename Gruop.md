@@ -7,7 +7,7 @@ ssh -i ./pem파일이름 계정명@ip
 
 ## Pre-qualification
 
-### Disable SELinux
+### Disable SELinux [전체  Node]
 https://www.lesstif.com/pages/viewpage.action?pageId=6979732
 ~~~
 sudo vi /etc/sysconfig/selinux

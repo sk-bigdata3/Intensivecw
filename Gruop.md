@@ -430,48 +430,33 @@ MariaDB [(none)]> show databases;
 ~~~
 CREATE DATABASE scm DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
 
-MariaDB [(none)]> GRANT ALL ON scm.* TO 'scm-user'@'%' IDENTIFIED BY 'password';
-Query OK, 0 rows affected (0.01 sec)
+GRANT ALL ON scm.* TO 'scm-user'@'%' IDENTIFIED BY 'password';
 
-MariaDB [(none)]> CREATE DATABASE aman DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
-Query OK, 1 row affected (0.00 sec)
+CREATE DATABASE aman DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
 
-MariaDB [(none)]> GRANT ALL ON aman.* TO 'aman-user'@'%' IDENTIFIED BY 'password';
-Query OK, 0 rows affected (0.00 sec)
+GRANT ALL ON aman.* TO 'aman-user'@'%' IDENTIFIED BY 'password';
 
-MariaDB [(none)]> CREATE DATABASE rman DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
-Query OK, 1 row affected (0.00 sec)
+CREATE DATABASE rman DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
 
-MariaDB [(none)]> GRANT ALL ON rman.* TO 'rman-user'@'%' IDENTIFIED BY 'password';
-Query OK, 0 rows affected (0.00 sec)
+GRANT ALL ON rman.* TO 'rman-user'@'%' IDENTIFIED BY 'password';
 
-MariaDB [(none)]>
-MariaDB [(none)]> CREATE DATABASE hue DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
-Query OK, 1 row affected (0.00 sec)
+CREATE DATABASE hue DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
 
-MariaDB [(none)]> GRANT ALL ON hue.* TO 'hue-user'@'%' IDENTIFIED BY 'password';
-Query OK, 0 rows affected (0.00 sec)
+GRANT ALL ON hue.* TO 'hue-user'@'%' IDENTIFIED BY 'password';
 
-MariaDB [(none)]> CREATE DATABASE metastore DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
-Query OK, 1 row affected (0.00 sec)
+CREATE DATABASE metastore DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
 
-MariaDB [(none)]> GRANT ALL ON metastore.* TO 'metastore-user'@'%' IDENTIFIED BY 'password';
-Query OK, 0 rows affected (0.00 sec)
+GRANT ALL ON metastore.* TO 'metastore-user'@'%' IDENTIFIED BY 'password';
 
-MariaDB [(none)]> CREATE DATABASE sentry DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
-Query OK, 1 row affected (0.00 sec)
+CREATE DATABASE sentry DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
 
-MariaDB [(none)]> GRANT ALL ON sentry.* TO 'sentry-user'@'%' IDENTIFIED BY 'password';
-Query OK, 0 rows affected (0.00 sec)
+GRANT ALL ON sentry.* TO 'sentry-user'@'%' IDENTIFIED BY 'password';
 
-MariaDB [(none)]> CREATE DATABASE oozie DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
-Query OK, 1 row affected (0.00 sec)
+CREATE DATABASE oozie DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
 
-MariaDB [(none)]> GRANT ALL ON oozie.* TO 'oozie-user'@'%' IDENTIFIED BY 'password';
-Query OK, 0 rows affected (0.00 sec)
+GRANT ALL ON oozie.* TO 'oozie-user'@'%' IDENTIFIED BY 'password';
 
-MariaDB [(none)]> FLUSH PRIVILEGES;
-Query OK, 0 rows affected (0.01 sec)
+FLUSH PRIVILEGES;
 ~~~
 
 * MariaDB에 db,user 생성 완료  
@@ -513,13 +498,14 @@ MariaDB [(none)]> show databases;
 ## CM settings on Web UI
 
 #### CM 초기화면 Login
-(중요)
 ```
+<선택>
 C:\Windows\System32\drivers\etc > hosts 파일 메모장에서 편집
 15.164.82.177 cm.com cm <- 퍼블릭IP 로 도메인 추가
-
-
-#모든 Node에 비밀번호 설정
+```
+**(필수!)**
+```
+#모든 Node에 비밀번호 설정 (*중요*)
 sudo passwd centos
 ```
 
@@ -539,7 +525,6 @@ admin / admin
 # service cloudera-scm-agent restart
 # sudo systemctl start cloudera-scm-server
 ```
-
 
 #### 클러스터 삭제 후 재설치 시
 * 에러 화면  

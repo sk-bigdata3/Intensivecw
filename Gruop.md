@@ -149,20 +149,11 @@ Note: Forwarding request to 'systemctl enable ntpd.service'.
 * util 서버에 cm 설치
 * 참고 : https://www.cloudera.com/documentation/enterprise/5-15-x/topics/configure_cm_repo.html
 
+* 모든 node에서 진행 (jdk설치를 위해)
 ```
 [centos@util ~]$ sudo wget https://archive.cloudera.com/cm5/redhat/7/x86_64/cm/cloudera-manager.repo -P /etc/yum.repos.d/
---2019-06-30 12:45:17--  https://archive.cloudera.com/cm5/redhat/7/x86_64/cm/cloudera-manager.repo
-Resolving archive.cloudera.com (archive.cloudera.com)... 151.101.72.167
-Connecting to archive.cloudera.com (archive.cloudera.com)|151.101.72.167|:443... connected.
-HTTP request sent, awaiting response... 200 OK
-Length: 290 [binary/octet-stream]
-Saving to: ‘/etc/yum.repos.d/cloudera-manager.repo’
-
-100%[======================================>] 290         --.-K/s   in 0s      
-
-2019-06-30 12:45:17 (13.2 MB/s) - ‘/etc/yum.repos.d/cloudera-manager.repo’ saved [290/290]
 ```
-
+* util에서 진행
 ~~~
 # cloudera install
 [centos@util ~]$ sudo yum install cloudera-manager-daemons cloudera-manager-server
@@ -172,7 +163,7 @@ Saving to: ‘/etc/yum.repos.d/cloudera-manager.repo’
 ![7-2-cm-success](https://user-images.githubusercontent.com/17976251/60868276-a2e8ae80-a267-11e9-97d1-1a0e048389b1.JPG)
 
 
-#### baseurl 수정
+#### baseurl 수정 (모든 node에서 진행 )
 ```
 [centos@util ~]$ sudo vi /etc/yum.repos.d/cloudera-manager.repo
 baseurl=https://archive.cloudera.com/cm5/redhat/6/x86_64/cm/5.15.2/

@@ -11,7 +11,8 @@ ssh -i ./pem파일이름 계정명@ip
 https://www.lesstif.com/pages/viewpage.action?pageId=6979732
 ~~~
 sudo vi /etc/sysconfig/selinux
-SELINUX=enforcing 을 SELINUX=disabled 로 변경후 저장한다.
+#SELINUX=enforcing 을 SELINUX=disabled 로 변경후 저장한다.
+SELINUX=disabled
 
 #Root 계정으로 변경
 sudo -i
@@ -20,7 +21,6 @@ reboot
 # putty 재접속 이후 활성화 여부 확인하면 disabled 적용되어 있음
 #selinux 활성화 여부 확인
 getenforce
-
 ~~~
 * selinux = disabled  
 ![1-1](https://user-images.githubusercontent.com/17976251/60863328-526b5400-a25b-11e9-9bf7-c387f7a222f0.JPG)
@@ -30,7 +30,6 @@ getenforce
 
 
 ### /etc/hosts/setting
-
 ~~~
 sudo vi /etc/hosts
 
@@ -42,14 +41,23 @@ sudo vi /etc/hosts
 172.31.14.162 dn3.cdhcluster.com dn3
 ~~~
 
+* version 2
+~~~
+10.146.0.2 node1.sk.com node1 
+10.146.0.5 node2.sk.com node2
+10.146.0.3 node3.sk.com node3
+10.146.0.4 node4.sk.com node4
+10.146.0.6 node5.sk.com node5
+~~~
+
 * vi /etc/hosts 파일 변경  
 ![2-1](https://user-images.githubusercontent.com/17976251/60864294-26050700-a25e-11e9-9d7d-a79b922005e2.JPG)
 
 ### Hostname modification for each node
 ~~~
 # 각각의 node
-sudo hostnamectl set-hostname <노드별명>
-예) sudo hostnamectl set-hostname mn1
+sudo hostnamectl set-hostname <노드명>
+예) sudo hostnamectl set-hostname node1.sk.com
 
 # 변경된 hostname 확인
 hostname
@@ -75,10 +83,7 @@ sudo status sshd.service [not found 인 경우도 있음]
 ![4-1](https://user-images.githubusercontent.com/17976251/60864724-5e591500-a25f-11e9-86b7-30877be269a1.JPG)
 
 
-### Install dependencies using yum
-uilt에만 설치하는 것 같지만 혹시 몰라서 5대 모두에 설치했음  
-시간 오래걸림, 하나씩 차근차근 설치하는게 나을 것 같음.  
-한번에 설치 다 돌렸다가 제대로 안되면 wget 다시 설치해줘야함
+### Install dependencies using yum - all node
 
 ~~~
 sudo yum update
@@ -89,7 +94,6 @@ sudo yum install -y wget
 
 * yum update/install wget 완료  
 ![5-1](https://user-images.githubusercontent.com/17976251/60865622-5e5a1480-a261-11e9-9c34-6d13b7d39dd1.JPG)
-
 
 
 ### Ntp setting
@@ -121,7 +125,7 @@ sudo systemctl start ntpd
 ntpq -p
 ~~~
 
-* 간단한 방법
+* 간단한 방법. 아직 검증 안됨
 ~~~
 [dltjsals71@node1 ~]$ sudo chkconfig ntpd on
 Note: Forwarding request to 'systemctl enable ntpd.service'.
@@ -132,7 +136,6 @@ Note: Forwarding request to 'systemctl enable ntpd.service'.
 ==============================================================================
 *metadata.google 71.79.79.71      2 u    1   64    1    0.179   -0.196   0.115
 [dltjsals71@node1 ~]$
-
 ~~~
 
 * ntp 설치 성공  
@@ -144,17 +147,16 @@ Note: Forwarding request to 'systemctl enable ntpd.service'.
 
 ### Repository settings for CDH 5.15 installation (util node에서 진행)
 
-#### config repositry CM
+#### config repositry CM (모든 node)
 
 * util 서버에 cm 설치
 * 참고 : https://www.cloudera.com/documentation/enterprise/5-15-x/topics/configure_cm_repo.html
 
-* 모든 node에서 진행 (jdk설치를 위해)
 ```
 [centos@util ~]$ sudo wget https://archive.cloudera.com/cm5/redhat/7/x86_64/cm/cloudera-manager.repo -P /etc/yum.repos.d/
 ```
 
-#### baseurl 수정 (모든 node에서 진행 )
+#### baseurl 수정 (모든 node)
 ```
 [centos@util ~]$ sudo vi /etc/yum.repos.d/cloudera-manager.repo
 baseurl=https://archive.cloudera.com/cm5/redhat/6/x86_64/cm/5.15.2/
@@ -165,8 +167,6 @@ baseurl=https://archive.cloudera.com/cm5/redhat/6/x86_64/cm/5.15.2/
 [centos@util ~]$ sudo rpm --import \
 > https://archive.cloudera.com/cm5/redhat/7/x86_64/cm/RPM-GPG-KEY-cloudera
 ```
-
-* util에서 진행
 ~~~
 # cloudera install
 [centos@util ~]$ sudo yum install cloudera-manager-daemons cloudera-manager-server
@@ -262,7 +262,6 @@ pid-file=/var/run/mariadb/mariadb.pid
 #
 !includedir /etc/my.cnf.d
 
-
 -- 끝
 ~~~
 
@@ -353,6 +352,9 @@ Thanks for using MariaDB!
 
 #### jdk 설치
 
+* util node가 아닌 다른 node 에서 jdk package가 없다고 설치가 안되면  
+
+
 * cloudera 5.15.x 가 아니라면 홈페이지에서 버전 확인 후 설치하는게 좋을듯.
 ```
 [centos@util ~]$ sudo yum install oracle-j2sdk1.7
@@ -426,8 +428,7 @@ MariaDB [(none)]> show databases;
 ```
 #### db, user 생성
 ~~~
-MariaDB [(none)]> CREATE DATABASE scm DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
-Query OK, 1 row affected (0.02 sec)
+CREATE DATABASE scm DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
 
 MariaDB [(none)]> GRANT ALL ON scm.* TO 'scm-user'@'%' IDENTIFIED BY 'password';
 Query OK, 0 rows affected (0.01 sec)
@@ -577,12 +578,6 @@ admin / admin
 8.Core 3개 설치  
 ![10-10-초기3개설치](https://user-images.githubusercontent.com/17976251/60882404-c79e4f80-a282-11e9-9152-46eaa0aefa35.JPG)
 
-9.클러스터 설정
-![10-11-클러스터설정(2)](https://user-images.githubusercontent.com/17976251/60882409-c9681300-a282-11e9-922b-3e710aa7d653.JPG)  
-![10-12-변경없음](https://user-images.githubusercontent.com/17976251/60882410-ca00a980-a282-11e9-9ebe-7c2f726f44e1.JPG)  
-![10-13-완료](https://user-images.githubusercontent.com/17976251/60882417-ca994000-a282-11e9-823f-7f98daf04c25.JPG)
-
-
 ### Assign roles on correct nodes  
 https://www.cloudera.com/documentation/enterprise/5-15-x/topics/cm_ig_host_allocations.html#host_role_assignments
 ```
@@ -608,6 +603,14 @@ https://www.cloudera.com/documentation/enterprise/5-15-x/topics/cm_ig_host_alloc
    secondary namenode -> util01
 ```
 ![10-11-클러스터설정](https://user-images.githubusercontent.com/17976251/60882134-329b5680-a282-11e9-832d-00e1b7477a83.JPG)
+
+
+
+9.클러스터 설정
+![10-11-클러스터설정(2)](https://user-images.githubusercontent.com/17976251/60882409-c9681300-a282-11e9-922b-3e710aa7d653.JPG)  
+![10-12-변경없음](https://user-images.githubusercontent.com/17976251/60882410-ca00a980-a282-11e9-9ebe-7c2f726f44e1.JPG)  
+![10-13-완료](https://user-images.githubusercontent.com/17976251/60882417-ca994000-a282-11e9-823f-7f98daf04c25.JPG)
+
 
 
 ### Screenshot of CM main page with green marks for all services

@@ -153,15 +153,6 @@ Note: Forwarding request to 'systemctl enable ntpd.service'.
 ```
 [centos@util ~]$ sudo wget https://archive.cloudera.com/cm5/redhat/7/x86_64/cm/cloudera-manager.repo -P /etc/yum.repos.d/
 ```
-* util에서 진행
-~~~
-# cloudera install
-[centos@util ~]$ sudo yum install cloudera-manager-daemons cloudera-manager-server
-~~~
-
-* CM 설치 완료 확인  
-![7-2-cm-success](https://user-images.githubusercontent.com/17976251/60868276-a2e8ae80-a267-11e9-97d1-1a0e048389b1.JPG)
-
 
 #### baseurl 수정 (모든 node에서 진행 )
 ```
@@ -174,6 +165,16 @@ baseurl=https://archive.cloudera.com/cm5/redhat/6/x86_64/cm/5.15.2/
 [centos@util ~]$ sudo rpm --import \
 > https://archive.cloudera.com/cm5/redhat/7/x86_64/cm/RPM-GPG-KEY-cloudera
 ```
+
+* util에서 진행
+~~~
+# cloudera install
+[centos@util ~]$ sudo yum install cloudera-manager-daemons cloudera-manager-server
+~~~
+
+* CM 설치 완료 확인  
+![7-2-cm-success](https://user-images.githubusercontent.com/17976251/60868276-a2e8ae80-a267-11e9-97d1-1a0e048389b1.JPG)
+
 
 ### MariaDB Installation / DB Setting modification : util
 

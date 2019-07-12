@@ -13,14 +13,14 @@ https://www.lesstif.com/pages/viewpage.action?pageId=6979732
 sudo vi /etc/sysconfig/selinux
 SELINUX=enforcing 을 SELINUX=disabled 로 변경후 저장한다.
 
-#selinux 활성화 여부 확인
-getenforce
-
 #Root 계정으로 변경
 sudo -i
 reboot
 
 # putty 재접속 이후 활성화 여부 확인하면 disabled 적용되어 있음
+#selinux 활성화 여부 확인
+getenforce
+
 ~~~
 * selinux = disabled  
 ![1-1](https://user-images.githubusercontent.com/17976251/60863328-526b5400-a25b-11e9-9bf7-c387f7a222f0.JPG)
@@ -68,7 +68,7 @@ sudo vi /etc/ssh/sshd_config
 
 # sshd 재시작 및 상태확인
 sudo systemctl restart sshd.service
-sudo status sshd.service
+sudo status sshd.service [not found 인 경우도 있음]
 ~~~
 
 * PasswordAuthentication -> yes 로 변경  
@@ -119,6 +119,20 @@ sudo chkconfig ntpd on
 sudo systemctl start ntpd
 # 성공 확인
 ntpq -p
+~~~
+
+* 간단한 방법
+~~~
+[dltjsals71@node1 ~]$ sudo chkconfig ntpd on
+Note: Forwarding request to 'systemctl enable ntpd.service'.
+[dltjsals71@node1 ~]$ sudo systemctl enable ntpd
+[dltjsals71@node1 ~]$ sudo systemctl start ntpd
+[dltjsals71@node1 ~]$ ntpq -p
+     remote           refid      st t when poll reach   delay   offset  jitter
+==============================================================================
+*metadata.google 71.79.79.71      2 u    1   64    1    0.179   -0.196   0.115
+[dltjsals71@node1 ~]$
+
 ~~~
 
 * ntp 설치 성공  
@@ -184,11 +198,89 @@ baseurl=https://archive.cloudera.com/cm5/redhat/6/x86_64/cm/5.15.2/
 [centos@util ~]$ sudo yum install -y mariadb-server
 ```
 
+### (추가) maria db setting
+* 생략하면 클러스터 올렸을 때 노란불 뜬다.  
+cloudera 설치 홈페이지에 있는 정보 복붙
+
+~~~
+sudo systemctl stop mariadb
+sudo vi /etc/my.cnf
+
+https://www.cloudera.com/documentation/enterprise/5-15-x/topics/install_cm_mariadb.html#install_cm_mariadb
+
+-- 아래 내용 복붙
+
+[mysqld]
+datadir=/var/lib/mysql
+socket=/var/lib/mysql/mysql.sock
+transaction-isolation = READ-COMMITTED
+# Disabling symbolic-links is recommended to prevent assorted security risks;
+# to do so, uncomment this line:
+symbolic-links = 0
+# Settings user and group are ignored when systemd is used.
+# If you need to run mysqld under a different user or group,
+# customize your systemd unit file for mariadb according to the
+# instructions in http://fedoraproject.org/wiki/Systemd
+
+key_buffer = 16M
+key_buffer_size = 32M
+max_allowed_packet = 32M
+thread_stack = 256K
+thread_cache_size = 64
+query_cache_limit = 8M
+query_cache_size = 64M
+query_cache_type = 1
+
+max_connections = 550
+#expire_logs_days = 10
+#max_binlog_size = 100M
+
+#log_bin should be on a disk with enough free space.
+#Replace '/var/lib/mysql/mysql_binary_log' with an appropriate path for your
+#system and chown the specified folder to the mysql user.
+log_bin=/var/lib/mysql/mysql_binary_log
+
+#In later versions of MariaDB, if you enable the binary log and do not set
+#a server_id, MariaDB will not start. The server_id must be unique within
+#the replicating group.
+server_id=1
+
+binlog_format = mixed
+
+read_buffer_size = 2M
+read_rnd_buffer_size = 16M
+sort_buffer_size = 8M
+join_buffer_size = 8M
+
+# InnoDB settings
+innodb_file_per_table = 1
+innodb_flush_log_at_trx_commit  = 2
+innodb_log_buffer_size = 64M
+innodb_buffer_pool_size = 4G
+innodb_thread_concurrency = 8
+innodb_flush_method = O_DIRECT
+innodb_log_file_size = 512M
+
+[mysqld_safe]
+log-error=/var/log/mariadb/mariadb.log
+pid-file=/var/run/mariadb/mariadb.pid
+
+#
+# include all files from the config directory
+#
+!includedir /etc/my.cnf.d
+
+
+-- 끝
+~~~
+
 ### mariadb 내렸다가 재시작 : util
 ```
 [centos@util ~]$ sudo systemctl enable mariadb
 Created symlink from /etc/systemd/system/multi-user.target.wants/mariadb.service to /usr/lib/systemd/system/mariadb.service.
 [centos@util ~]$ sudo systemctl start mariadb
+# 잘 떴는지 확인
+sudo systemctl statuc mariadb
 ```
 
 ### mariadb 권한 설정 : util
@@ -268,6 +360,8 @@ Thanks for using MariaDB!
 ### MySQL Connector / JDK file download for each node (중요!!!!!!!!!!!@@)
 
 #### jdk 설치
+
+* cloudera 5.15.x 가 아니라면 홈페이지에서 버전 확인 후 설치하는게 좋을듯.
 ```
 [centos@util ~]$ sudo yum install oracle-j2sdk1.7
 ```

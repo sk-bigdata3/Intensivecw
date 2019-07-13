@@ -622,6 +622,9 @@ sudo usermod -aG wheel training
 
 # 계정 그룹 설정 확인
 getent group wheel
+
+# training 계정으로 접속
+su training 
 ```
 ### Make tables on MySQL using the data in all.zip file
 

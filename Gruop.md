@@ -591,7 +591,7 @@ https://www.cloudera.com/documentation/enterprise/5-15-x/topics/cm_ig_host_alloc
    secondary namenode -> util01
    
 - 기본 서비스 설치 처음에는 HDFS, YARN, ZOOKEEPER 만 설치
-- 추가 서비스 설치 (FLUME, IMPALA ,SQOOP,SPARK,KAFKA, HUE, OOZIE, HIVE )
+- 추가 서비스 설치 (HUE, OOZIE, HIVE, SQOOP / FLUME, IMPALA, SPARK ,KAFKA )
 ```
 ![10-11-클러스터설정](https://user-images.githubusercontent.com/17976251/60882134-329b5680-a282-11e9-832d-00e1b7477a83.JPG)
 

@@ -613,7 +613,16 @@ https://www.cloudera.com/documentation/enterprise/5-15-x/topics/cm_ig_host_alloc
 ## Data handling(Hive/Impala/Sqoop)
 
 ### Create user 'training' on HDFS and Linux for each node
+```
+# 모든 host에 아래 계정 생성
+cat /etc/passwd | grep training
+sudo useradd training
+sudo passwd training
+sudo usermod -aG wheel training
 
+# 계정 그룹 설정 확인
+getent group wheel
+```
 ### Make tables on MySQL using the data in all.zip file
 
 ### Import data for MySQL to HDFS using sqoop

@@ -613,6 +613,8 @@ https://www.cloudera.com/documentation/enterprise/5-15-x/topics/cm_ig_host_alloc
 
 ### Install sqoop service
 
+Cluster -> 서비스 추가 -> Sqoop2 : util(Node1) 에 설치
+
 ## Data handling(Hive/Impala/Sqoop)
 
 ### Create user 'training' on HDFS and Linux for each node

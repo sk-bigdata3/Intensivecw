@@ -64,8 +64,8 @@ sudo vi /etc/hosts
 
 ### Hostname modification for each node
 ~~~
-# 각각의 node
-sudo hostnamectl set-hostname <노드명>
+# 각각의 node ( 노드 명은 약어 말고 full name 으로 해주는 게 좋음)
+sudo hostnamectl set-hostname <노드명> 
 예) sudo hostnamectl set-hostname node1.sk.com
 
 # 변경된 hostname 확인
@@ -581,8 +581,8 @@ https://www.cloudera.com/documentation/enterprise/5-15-x/topics/cm_ig_host_alloc
    data01,data02,master
 5) hive
    gateway -> 5대 전부
-   metastore -> data01
-   hiveServer2 -> data01
+   metastore -> util
+   hiveServer2 -> util
 6) hue
    전부 util01
 7) hdfs
@@ -753,6 +753,9 @@ e. You are free to use whatever database in Hive.
 
 f. Create authors as and external table.
 ```
+  # hue 에서 쿼리 수행
+```
+```
 CREATE EXTERNAL TABLE authors (
 id int,
 first_name string,
@@ -767,7 +770,9 @@ LOCATION "/user/training/authors/"
 ```
 
 g. Create posts as a managed table.
-
+```
+  # hue 에서 쿼리 수행
+```
 ~~~
 CREATE TABLE posts (
 id int,
@@ -789,7 +794,9 @@ a. Create query that counts the number of posts each author has created.
 b. The output of the query should provied the following information
 
 c. The output of the query should be saved in you HDFS home directory.
-
+```
+  # hue 에서 쿼리 수행
+```
 ~~~
 INSERT OVERWRITE DIRECTORY '/user/training/results'
 ROW FORMAT DELIMITED
@@ -810,6 +817,9 @@ a. Create a MySQL table and name it "results"
 
 b. The table should be created under the databse "test"
 
+```
+  # mysql 에서 수행
+```
 ~~~
 CREATE TABLE `results` (
 `id` int,

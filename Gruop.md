@@ -729,7 +729,7 @@ c. The imported data should be saved in training's HDFS home directory
 su training
 ```
 ~~~
-# 
+# sqoop 
 sqoop import \
 --connect jdbc:mysql://node1.sk.com/test \
 --username training \

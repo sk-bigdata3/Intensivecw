@@ -697,7 +697,7 @@ CREATE DATABASE test;
 use test;
 ~~~
 
-b.Create 2 table in the test databases : authors and posts.
+b.Create 2 table in the test databases : authors and posts. (mysql)
 
 ~~~
 source /autors.sql
@@ -747,6 +747,19 @@ d. In Hive, create 2 tables:authors and posts. The will contain the data that yo
 e. You are free to use whatever database in Hive.
 
 f. Create authors as and external table.
+```
+CREATE EXTERNAL TABLE authors (
+id int,
+first_name string,
+last_name string,
+email string,
+birthdate date,
+added timestamp
+)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY '\t'
+LOCATION "/user/training/authors/"
+```
 
 g. Create posts as a managed table.
 
@@ -762,17 +775,6 @@ date date
 ROW FORMAT DELIMITED
 FIELDS TERMINATED BY '\t'
 LOCATION "/user/training/posts/"
-CREATE EXTERNAL TABLE authors (
-id int,
-first_name string,
-last_name string,
-email string,
-birthdate date,
-added timestamp
-)
-ROW FORMAT DELIMITED
-FIELDS TERMINATED BY '\t'
-LOCATION "/user/training/authors/"
 ~~~
 
 #### [part1]Create and rum a Hive / Impala query. From the query, generate the results dataset that you will use in the next step to export in MySQL.

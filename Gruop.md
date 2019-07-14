@@ -628,6 +628,31 @@ getent group wheel
 # training 계정으로 접속
 su training 
 ```
+
+* 2번째 방법 - 모든 Node
+~~~ 
+# 계정 생성
+sudo groupadd skcc
+cat /etc/passwd | grep training
+sudo useradd training
+sudo passwd training
+sudo usermod -aG skcc training
+
+# 계정 수도권한추가
+sudo usermod -aG wheel training
+
+cat /etc/passwd | grep training
+cat /etc/group  | skcc
+
+# getent 확인
+
+$ getent passwd training
+training:x:1001:1002::/home/training:/bin/bash
+$getent group skcc
+skcc:x:1001:training
+$ getent group wheel
+wheel:x:10:centos,training
+~~~
 ### Make tables on MySQL using the data in all.zip file
 
 ### Import data for MySQL to HDFS using sqoop

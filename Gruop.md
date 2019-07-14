@@ -543,6 +543,9 @@ admin / admin
 ![10-1](https://user-images.githubusercontent.com/17976251/60882157-40e97280-a282-11e9-9fc0-acda6192153f.JPG)
 
 2.  
+```
+ 노드 검색 시, full name으로 검색 하는 
+```
 ![10-2](https://user-images.githubusercontent.com/17976251/60882163-42b33600-a282-11e9-9369-ce137f775d61.JPG)  
 
 3.변경 없음  

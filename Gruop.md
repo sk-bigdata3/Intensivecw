@@ -654,7 +654,28 @@ $ getent group wheel
 wheel:x:10:centos,training
 ~~~
 ### Make tables on MySQL using the data in all.zip file
+~~~ 참고용
+# all.zip이 있는 윈도우 경로에서 아래 실행 -> 결과 값 호스트 홈 디렉토리에 업로드
+scp -i ./skcc.pem all.zip training@util01:.
+scp -i ./skcc.pem all.zip training@dn1:.
 
+# unzip: util
+sudo yum install -y unzip
+unzip all.zip
+~~~
 ### Import data for MySQL to HDFS using sqoop
+~~~ 참고용
+# trainig user 권한 추가 :util
+
+mysql -u root -p 
+GRANT ALL ON *.* TO 'training'@'%' IDENTIFIED BY 'training';
+show grants for 'training'@'%';
+~~~
+
+~~~
+# setup Script실행 :data01
+cd /home/training/training_materials/devsh/scripts
+ ./setup.sh
+~~~
 
 ### Create tables using Hive of Impala

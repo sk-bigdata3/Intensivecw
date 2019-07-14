@@ -544,7 +544,8 @@ admin / admin
 
 2.  
 ```
- 노드 검색 시, full name으로 검색 하는 
+ 노드 검색 시, full name으로 검색 하는 것을 권장함.
+ (약어로 사용할 경우 클러스터 올린 후에 문제가 생길 수 있음)
 ```
 ![10-2](https://user-images.githubusercontent.com/17976251/60882163-42b33600-a282-11e9-9369-ce137f775d61.JPG)  
 

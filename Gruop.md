@@ -288,7 +288,8 @@ sudo systemctl statuc mariadb
 ```
 - 참고 url : https://www.cloudera.com/documentation/enterprise/5-15-x/topics/cm_ig_installing_configuring_dbs.html
 [centos@util ~]$ sudo /usr/bin/mysql_secure_installation
-
+```
+```
 NOTE: RUNNING ALL PARTS OF THIS SCRIPT IS RECOMMENDED FOR ALL MariaDB
       SERVERS IN PRODUCTION USE!  PLEASE READ EACH STEP CAREFULLY!
 
@@ -438,31 +439,24 @@ MariaDB [(none)]> show databases;
 #### db, user 생성
 ~~~
 CREATE DATABASE scm DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
-
 GRANT ALL ON scm.* TO 'scm-user'@'%' IDENTIFIED BY 'password';
 
 CREATE DATABASE aman DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
-
 GRANT ALL ON aman.* TO 'aman-user'@'%' IDENTIFIED BY 'password';
 
 CREATE DATABASE rman DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
-
 GRANT ALL ON rman.* TO 'rman-user'@'%' IDENTIFIED BY 'password';
 
 CREATE DATABASE hue DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
-
 GRANT ALL ON hue.* TO 'hue-user'@'%' IDENTIFIED BY 'password';
 
 CREATE DATABASE metastore DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
-
 GRANT ALL ON metastore.* TO 'metastore-user'@'%' IDENTIFIED BY 'password';
 
 CREATE DATABASE sentry DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
-
 GRANT ALL ON sentry.* TO 'sentry-user'@'%' IDENTIFIED BY 'password';
 
 CREATE DATABASE oozie DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
-
 GRANT ALL ON oozie.* TO 'oozie-user'@'%' IDENTIFIED BY 'password';
 
 FLUSH PRIVILEGES;
@@ -595,6 +589,9 @@ https://www.cloudera.com/documentation/enterprise/5-15-x/topics/cm_ig_host_alloc
    datanode -> data01,02,03
    namenode -> master
    secondary namenode -> util01
+   
+- 기본 서비스 설치 처음에는 HDFS, YARN, ZOOKEEPER 만 설치
+- 추가 서비스 설치 (HUE, OOZIE, HIVE, SQOOP / FLUME, IMPALA, SPARK ,KAFKA )
 ```
 ![10-11-클러스터설정](https://user-images.githubusercontent.com/17976251/60882134-329b5680-a282-11e9-832d-00e1b7477a83.JPG)
 
@@ -618,7 +615,19 @@ Cluster -> 서비스 추가 -> Sqoop2 : util(Node1) 에 설치
 ## Data handling(Hive/Impala/Sqoop)
 
 ### Create user 'training' on HDFS and Linux for each node
+```
+# 모든 host에 아래 계정 생성
+cat /etc/passwd | grep training
+sudo useradd training
+sudo passwd training
+sudo usermod -aG wheel training
 
+# 계정 그룹 설정 확인
+getent group wheel
+
+# training 계정으로 접속
+su training 
+```
 ### Make tables on MySQL using the data in all.zip file
 
 ### Import data for MySQL to HDFS using sqoop

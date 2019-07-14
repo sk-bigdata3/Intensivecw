@@ -734,6 +734,7 @@ sqoop import \
 --fields-terminated-by "\t" \
 --target-dir /user/training/posts
 ~~~
+~~~
 sqoop import \
 --connect jdbc:mysql://node1.sk.com/test \
 --username training \

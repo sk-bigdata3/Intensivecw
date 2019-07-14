@@ -1,0 +1,179 @@
+#!/bin/bash
+
+##사전 설정
+##인터넷되게 설정 /etc/sysconfig/network-script/ifcfg-en?? 내용 변경 onboot=yes 후 reboot
+##sudo 패스워드 없이 사용 
+##sudo chmod 640 /etc/sudoers
+#sudo vi /etc/sudoers
+##sudo bash -c 'echo 사용자명 ALL=NOPASSWD: ALL >> /etc/sudoers'
+##추가
+##sudo chmod 440 /etc/sudoers
+##
+
+
+#selinux 설정
+sudo sed -i 's/^SELINUX=.*/SELINUX=disabled/' /etc/sysconfig/selinux
+
+#etc hosts설정
+echo "input private IP of cm : "
+read cmip
+
+echo "input private IP of m1 : "
+read m1ip
+
+echo "input private IP of d1 : "
+read d1ip
+
+echo "input private IP of d2 : "
+read d2ip
+
+echo "input private IP of d3 : "
+read d3ip
+
+echo "IP lists...5 seconds"
+echo $cmip
+echo $m1ip
+echo $d1ip
+echo $d2ip
+echo $d3ip
+
+sleep 5
+sudo yum update -y
+
+
+
+
+#ntp설정
+sudo yum install -y ntp
+
+sudo sed -i 's/^server 0.centos.pool.ntp.org/#server 0.centos.pool.ntp.org/' /etc/ntp.conf
+sudo sed -i 's/^server 1.centos.pool.ntp.org/#server 1.centos.pool.ntp.org/' /etc/ntp.conf
+sudo sed -i 's/^server 2.centos.pool.ntp.org/#server 2.centos.pool.ntp.org/' /etc/ntp.conf
+sudo sed -i 's/^server 3.centos.pool.ntp.org/#server 3.centos.pool.ntp.org/' /etc/ntp.conf
+
+sudo bash -c 'echo server kr.pool.ntp.org >> /etc/ntp.conf'
+sudo bash -c 'echo server time.bora.net >> /etc/ntp.conf'
+sudo bash -c 'echo server time.kornet.net >> /etc/ntp.conf'
+
+sudo chkconfig ntpd on
+sudo systemctl start ntpd
+
+ntpq -p
+sleep 3
+
+
+
+#sshd 설정
+sudo sed -i 's/PermitRootLogin/#PermitRootLogin/' /etc/ssh/sshd_config
+sudo bash -c 'echo PermitRootLogin yes >> /etc/ssh/sshd_config'
+#sudo sed -i 's/^PermitRootLogin .*/PermitRootLogin yes/' /etc/ssh/sshd_config
+sudo sed -i 's/^PasswordAuthentication .*/PasswordAuthentication yes/' /etc/ssh/sshd_config
+sudo systemctl start sshd
+
+
+
+
+#repository 설정
+sudo yum install -y wget
+sudo wget https://archive.cloudera.com/cm5/redhat/7/x86_64/cm/cloudera-manager.repo -P /etc/yum.repos.d/
+sudo sed -i 's/^baseurl=.*/baseurl=https:\/\/archive.cloudera.com\/cm5\/redhat\/7\/x86_64\/cm\/5.15.2\//' /etc/yum.repos.d/cloudera-manager.repo
+
+sudo rpm --import https://archive.cloudera.com/cm5/redhat/7/x86_64/cm/RPM-GPG-KEY-cloudera
+sudo yum install -y cloudera-manager-daemons cloudera-manager-server
+
+
+
+
+
+#/etc/hosts에 내용 추가
+sudo bash -c echo '$cmip cm cm.com >> /etc/hosts'
+sudo bash -c echo '$m1ip m1 m1.com >> /etc/hosts'
+sudo bash -c echo '$d1ip d1 d1.com >> /etc/hosts'
+sudo bash -c echo '$d2ip d2 d2.com >> /etc/hosts'
+sudo bash -c echo '$d3ip d3 d3.com >> /etc/hosts'
+
+sudo hostnamectl set-hostname cm
+
+#hostname 이름 설정 및 모든 노드 복사
+#sudo hostnamectl set-hostname cm
+#sudo scp /etc/hosts m1:/etc/hosts
+#sudo scp /etc/hosts d1:/etc/hosts
+#sudo scp /etc/hosts d2:/etc/hosts
+#sudo scp /etc/hosts d3:/etc/hosts
+
+
+
+#jdk 설정 및 path추가
+sudo yum install -y oracle-j2sdk*
+
+cd ~
+sudo sed -i 's/export PATH/#export PATH/' .bash_profile
+sudo bash -c 'echo JAVA_HOME=/usr/java/jdk1.7.0_67-cloudera >> .bash_profile'
+sudo bash -c 'echo export PATH=\$JAVA_HOME/bin:\$PATH >> .bash_profile'
+
+
+echo "java 버전 확인.."
+java -version
+sleep 3
+
+
+#mariaDB 설치 및 설정
+sudo yum install -y mariadb-server
+sudo systemctl enable mariadb
+sudo systemctl start mariadb
+
+#mysql jdbc driver 설치
+sudo wget https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-5.1.46.tar.gz
+tar zxvf mysql-connector-java-5.1.46.tar.gz 
+sudo mkdir -p /usr/share/java/ 
+cd mysql-connector-java-5.1.46 
+sudo cp mysql-connector-java-5.1.46-bin.jar /usr/share/java/mysql-connector-java.jar
+
+
+echo "mariaDB 설정...(Enter 입력 필요)"
+sleep 5
+
+sudo /usr/bin/mysql_secure_installation
+
+
+echo "Database 생성..."
+echo "Database 패스워드확인 --> password "
+sleep 5
+
+
+cd ~
+echo "CREATE DATABASE scm DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;" >> create_database.sql
+echo "GRANT ALL ON scm.* TO 'scm-user'@'%' IDENTIFIED BY 'password';" >> create_database.sql
+
+echo "CREATE DATABASE amon DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;"  >> create_database.sql
+echo "GRANT ALL ON amon.* TO 'amon-user'@'%' IDENTIFIED BY 'password'; " >> create_database.sql
+ 
+echo "CREATE DATABASE rman DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;" >> create_database.sql 
+echo "GRANT ALL ON rman.* TO 'rman-user'@'%' IDENTIFIED BY 'password'; " >> create_database.sql
+ 
+echo "CREATE DATABASE hue DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci; " >> create_database.sql
+echo "GRANT ALL ON hue.* TO 'hue-user'@'%' IDENTIFIED BY 'password';" >> create_database.sql 
+ 
+echo "CREATE DATABASE metastore DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;" >> create_database.sql 
+echo "GRANT ALL ON metastore.* TO 'metastore-user'@'%' IDENTIFIED BY 'password'; " >> create_database.sql
+ 
+echo "CREATE DATABASE sentry DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci; " >> create_database.sql
+echo "GRANT ALL ON sentry.* TO 'sentry-user'@'%' IDENTIFIED BY 'password'; " >> create_database.sql
+ 
+echo "CREATE DATABASE oozie DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci; " >> create_database.sql
+echo "GRANT ALL ON oozie.* TO 'oozie-user'@'%' IDENTIFIED BY 'password';"  >> create_database.sql
+
+echo "CREATE DATABASE hive DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci; " >> create_database.sql
+echo "GRANT ALL ON hive.* TO 'hive-user'@'%' IDENTIFIED BY 'password';"  >> create_database.sql
+
+echo "FLUSH PRIVILEGES;" >> create_database.sql
+echo "SHOW DATABASES;" >> create_database.sql
+
+mysql -u root -p < create_database.sql
+
+
+#cm database 설정
+sudo /usr/share/cmf/schema/scm_prepare_database.sh mysql scm scm-user password
+sudo rm /etc/cloudera-scm-server/db.mgmt.properties 
+sudo systemctl start cloudera-scm-server
+

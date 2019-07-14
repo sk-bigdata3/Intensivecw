@@ -85,7 +85,7 @@ sudo vi /etc/ssh/sshd_config
 
 # sshd 재시작 및 상태확인
 sudo systemctl restart sshd.service
-sudo status sshd.service [not found 인 경우도 있음]
+sudo systemctl status sshd.service [not found 인 경우도 있음]
 ~~~
 
 * PasswordAuthentication -> yes 로 변경  

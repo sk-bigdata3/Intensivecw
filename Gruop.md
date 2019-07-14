@@ -693,7 +693,6 @@ a. In MySQL, create a database and name it "test"
 
 ~~~
 CREATE DATABASE test;
-
 use test;
 ~~~
 
@@ -729,7 +728,7 @@ c. The imported data should be saved in training's HDFS home directory
 su training
 ```
 ~~~
-# sqoop 
+# sqoop 수행 (node 1 : util)
 sqoop import \
 --connect jdbc:mysql://node1.sk.com/test \
 --username training \
@@ -821,7 +820,9 @@ CREATE TABLE `results` (
 ~~~
 
 c. Finally, export into MySql the results of your query
-
+```
+ # node 1 : util   node2 : master node
+```
 ~~~
 sqoop export \
 --connect jdbc:mysql://node1.sk.com/test \

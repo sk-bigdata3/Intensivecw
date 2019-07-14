@@ -87,6 +87,8 @@ sudo yum install -y cloudera-manager-daemons cloudera-manager-server
 ## Installing the JDK Using Cloudera Manager (all server)
 ~~~
 sudo yum install -y oracle-j2sdk1.7
+** 안되는 경우 
+** sudo wget https://archive.cloudera.com/cm5/redhat/7/x86_64/cm/cloudera-manager.repo -P /etc/yum.repos.d/ 
 ~~~
 ![](./Images/4.Installing_the_JDK_Using_Cloudera_Manager_(cm).png)
 ## Installing MariaDB Server (cm)

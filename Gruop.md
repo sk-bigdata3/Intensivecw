@@ -724,8 +724,12 @@ a. Use sqoop to import the data from authors and posts.
 b. For both tables, you will import the data in tab delimited text format
 
 c. The imported data should be saved in training's HDFS home directory
-
+```
+# training 계정으로 접속
+su training
+```
 ~~~
+# 
 sqoop import \
 --connect jdbc:mysql://node1.sk.com/test \
 --username training \

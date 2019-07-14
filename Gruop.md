@@ -656,14 +656,16 @@ wheel:x:10:centos,training
 ### Make tables on MySQL using the data in all.zip file
 ~~~ 참고용
 # all.zip이 있는 윈도우 경로에서 아래 실행 -> 결과 값 호스트 홈 디렉토리에 업로드
-scp -i ./skcc.pem all.zip training@util01:.
+scp -i ./skcc.pem all.zip training@<util 외부 ip>:.
+$ scp -i ~/.ssh/gcp_rsa all.zip training@xx.xx.xx.xxx:/home/training
+
 scp -i ./skcc.pem all.zip training@dn1:.
 
 # unzip: util
 sudo yum install -y unzip
 unzip all.zip
 ~~~
-### Import data for MySQL to HDFS using sqoop
+
 ~~~ 참고용
 # trainig user 권한 추가 :util
 
@@ -678,4 +680,146 @@ cd /home/training/training_materials/devsh/scripts
  ./setup.sh
 ~~~
 
-### Create tables using Hive of Impala
+### [part1] Import data for MySQL to HDFS using sqoop & Create tables using Hive of Impala
+
+* sql 파일 util 서버로 이동
+~~~
+$ scp -i ~/.ssh/gcp_rsa posts23-04-2019-02-44.sql.zip training@<util의 외부ip>:.
+
+$ scp -i ~/.ssh/gcp_rsa authors-23-04-2019-02-34-beta.sql.zip training@<util의 외부ip>:.
+~~~
+
+a. In MySQL, create a database and name it "test"
+
+~~~
+CREATE DATABASE test;
+
+use test;
+~~~
+
+b.Create 2 table in the test databases : authors and posts.
+
+~~~
+source /autors.sql
+source /posts.sql
+~~~
+* check
+~~~
+select count(*) from posts;
+select count(*) from authors;
+~~~
+
+c. Create and grant user "training" with password "training" full access to the test database.
+
+~~~
+create user 'training'@'%' identified by 'training';
+
+grant all privileges on *.* to 'training'@'%';
+~~~
+
+#### [part1]Extract Tables authors and posts from the database and create Hive tables.
+
+a. Use sqoop to import the data from authors and posts.
+
+b. For both tables, you will import the data in tab delimited text format
+
+c. The imported data should be saved in training's HDFS home directory
+
+~~~
+sqoop import \
+--connect jdbc:mysql://node1.sk.com/test \
+--username training \
+--password training \
+--table posts \
+--fields-terminated-by "\t" \
+--target-dir /user/training/posts
+sqoop import \
+--connect jdbc:mysql://node1.sk.com/test \
+--username training \
+--password training \
+--table authors \
+--fields-terminated-by "\t" \
+--target-dir /user/training/authors
+~~~
+
+d. In Hive, create 2 tables:authors and posts. The will contain the data that you imported from Sqoop in above step.
+
+e. You are free to use whatever database in Hive.
+
+f. Create authors as and external table.
+
+g. Create posts as a managed table.
+
+~~~
+CREATE TABLE posts (
+id int,
+author_id int,
+title string,
+description string,
+content string,
+date date
+)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY '\t'
+LOCATION "/user/training/posts/"
+CREATE EXTERNAL TABLE authors (
+id int,
+first_name string,
+last_name string,
+email string,
+birthdate date,
+added timestamp
+)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY '\t'
+LOCATION "/user/training/authors/"
+~~~
+
+#### [part1]Create and rum a Hive / Impala query. From the query, generate the results dataset that you will use in the next step to export in MySQL.
+
+a. Create query that counts the number of posts each author has created.
+
+b. The output of the query should provied the following information
+
+c. The output of the query should be saved in you HDFS home directory.
+
+~~~
+INSERT OVERWRITE DIRECTORY '/user/training/results'
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY '\t'
+SELECT a.id AS ID
+, a.first_name AS fname
+, a.last_name AS lname
+, count(b.title) AS num_posts
+FROM authors A,
+posts B
+WHERE A.id = b.author_id
+GROUP BY a.id, a.first_name, a.last_name;
+~~~
+
+#### [part1]Export the data from above query to MySQL
+
+a. Create a MySQL table and name it "results"
+
+b. The table should be created under the databse "test"
+
+~~~
+CREATE TABLE `results` (
+`id` int,
+`fname` varchar(500),
+`lname` varchar(500),
+`num_posts` int
+)
+~~~
+
+c. Finally, export into MySql the results of your query
+
+~~~
+sqoop export \
+--connect jdbc:mysql://node1.sk.com/test \
+--username training \
+--password training \
+--table results \
+--fields-terminated-by '\t' \
+--export-dir hdfs://node2.sk.com:8020/user/training/results
+~~~

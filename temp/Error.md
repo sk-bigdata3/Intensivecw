@@ -1,4 +1,58 @@
+hadoop
+```
+Q. input file to HDFS, client appl. pass the data to NN, which then divides the data into blocks and passes the blocks to the DN 
+   > False
+   
+Q. default file replication factor in HDFS 
+   > 3
+   
+Q. what component of HDFS maintaining the namespace
+   > Namenode
+
+Q. Namespace of the file system using two set
+   > fs image, edits
+   
+Q. which type of hadoop cluster node for data processing
+   > Namenode
+   
+Q. manage cluster CPU and memory resource
+   > Yarn
+   
+Q. How does a NN determine DN availability
+   > Heartbeat
+   
+Q. what construct CPU and memory
+   > Container
+  
+Q. responsible for application fault tolerance
+   > Zookeeper
+   
+Q. the various task for a single appl. will run on same node if sufficeint memory and CPU resource are available on that node
+   > False
+   
+Q. how much data will you be able to store on cluster if it has 12 node with 4TB.. per node allocated..?
+   > 16 TB
+```
 hive/Oozie
+```
+Q. impala metasotre requires underlying SQL DB
+  > True
+
+Q. block size of file store HDFS
+  > dfs.block.size  
+
+Q. Hive table consists of a schema stored in Hive [metastore] and
+   data stored in [hdfs]
+   
+Q. 2 daemons run on mn in hadoop cluster running MapReduce v2 on Yarn
+  > RM, NodeManager
+  
+Q. block placement other two replica
+  >
+ 
+Q. which command see the structure of relation
+  >
+```
 ```
 Q.
 identify the function did not work by stand-by namenode daemon configured to run with a active namenode

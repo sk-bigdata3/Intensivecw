@@ -16,6 +16,9 @@ sudo yum -y install nscd sudo systemctl enable nscd sudo systemctl start nscd su
 sudo yum -y install ntp sudo chkconfig ntpd on sudo systemctl enable ntpd sudo systemctl start ntpd 
 ~~~
 
+### disable Transparent Huge pages (THP)  
+https://www.thegeekdiary.com/centos-rhel-7-how-to-disable-transparent-huge-pages-thp/
+
 ### Disable SELinux [전체  Node]
 https://www.lesstif.com/pages/viewpage.action?pageId=6979732
 ~~~

@@ -41,6 +41,9 @@ Q. impala metasotre requires underlying SQL DB
 Q. block size of file store HDFS
   > dfs.block.size  
 
+Q. impala daemon / hive service
+  >
+   
 Q. Hive table consists of a schema stored in Hive [metastore] and
    data stored in [hdfs]
    

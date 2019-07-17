@@ -1,7 +1,7 @@
 
-![](./Images/y1.PNG)
-![](./Images/y2.PNG)
-![](./Images/y3.PNG)
-![](./Images/y4.PNG)
-![](./Images/y5.PNG)
-![](./Images/y6.PNG)
+![](./Images/y1.png)
+![](./Images/y2.png)
+![](./Images/y3.png)
+![](./Images/y4.png)
+![](./Images/y5.png)
+![](./Images/y6.png)

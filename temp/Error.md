@@ -103,3 +103,80 @@ A. X -> Application manager 라고 한다.
  reduce fail -> application master 가 check하고 node manager가 중지시킴?
 
 ```
+
+spark
+
+```
+1. What is RDD
+
+2. What is spark context
+
+3. What are the 2types of operations in spark?
+> transformation : 기존 rdd 데이터를 변경하여 새로운 rdd를 생성해내는 operation으로 filter, map 등이 있음
+> action : rdd값을 기반으로 계산을 하여 결과를 생성해 내는 것으로 count() 같은 operation이 있음
+
+4. what is lazy evaluation and how is it related to the 2 types of operations in question 3
+> transformation에 해당하는 operaion이 수행될 때에는 실제 메모리에 로딩되지 않다가,
+action operation이 rdd생성 요청을 하는 시점에 데이터 로딩 및 변환이 실제 수행된다.
+
+5. what are the 3 ways that an rdd can be created?
+> a file of set of files
+from data in memory
+from another rdd
+
+6. what is key-value pair rdd
+
+7. what are 3 things you need to do when creating a spark app?
+> import (from pyspark inmport spark context ..)
+spark context 생성 (sc=sparkcontext())
+sc.stop()
+
+8. what is set configuration parameters for a spark app
+> sparkconf
+
+9. what is stage in spark?
+> spark실행 계획의 물리적 단위다.
+동일 파니션 내에 수행되는 작업은 동일 stage내에서 실행되고, 스테이지 내의 작업들은 파이프 라인으로 연결되어 있음.
+파티션이 달라지는 셔플 작업이 발생하면 repartition이 발생하고 stage가 달라짐
+
+10. waht is rdd persistence? when we use?
+> persist는 rdd를 저장하는 방법으로 persist()메소드를 통해 중간 결과를 저장함으로써 계산 오버헤드 줄임
+
+11. compare micro-batch vs event driven in streaming process
+event driven은 도착한 데이터에 응답하도록 설계되어 있다. 따라서 지속적으로 모니링하는 이벤트 중심 아키텍처를 구현해야 함.
+반면 micro-batch는 새 데이터를 주기적으로 확인하고 다으 배치가 발생할때만 데이터를 처리한다.
+12. what is the main advantage of using dataframe api compared to rdd core api
+> data frame에 rdd보다 뛰어난 메모리와 쿼리 optimizer가 있기 때문에 데이터 프레임이 빠름
+
+13. you are analyzing streaming data you want to count on a key value over the last 10 minutes of data, every 2 minutes, assuming that you are batching your data every 1 minutes
+what function/method would you use?
+> see = new StreamContext(new SparkConf(),60)
+logs = ssc.socketTextStream(hostname,port)
+reqcountsByWindow = logs.map(lambda line:(line.split(' ')[2],1).reduceByKeyAndWindow(lambda v1,v2:v1+v2,10*60,2*60)
+14. what are data frame?
+
+15. what are the services(daemon) utilized for hdfs ha mode?
+> active name node, stand by name node, zookeeper, journal node
+
+16. what is schema evolution in avro?
+> backward : 새 스키마로 이전 데이터 읽음
+forward : 스키마는 변하지 않고 새로운 스키마의 데이터가 들어오면 ignore
+full : 필드 추가 시에는 default를 무조껀 넣어야 함
+
+17. what is kudu?
+> 일반 dbms처럼 primary key를 제공해 랜덤 엑세스 속도가 빠름
+> 데이터라 컬럼 기준으로 저장돼있어 특정 컬럼만 읽을 때 성능 높일 수 있음
+
+18. what is defference between srf and drf in pool management?
+srf(single resource fairness) 는 메모리 리소스에 근간해 application 조정
+drf(dominant ..)는 메모리와 cpu모두에 근간해 schedule함
+
+19. issue command to save the name node metadata to disk
+> hdfs dfsadmin -safemode enter
+hdfs dfsadmin -saveNamespace
+hdfs dfsadmin -safemode leave
+
+20. what is hadoop client? issue a command to copy a file in your local linux directory to your home directory in hdfs. change the block size to 64MB in a chd installation
+> export HADOOP_CLIENT_OPTS="-Xms64m -Xmx1024m"
+
+```

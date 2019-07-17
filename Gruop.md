@@ -189,7 +189,7 @@ baseurl=https://archive.cloudera.com/cm5/redhat/6/x86_64/cm/5.15.2/
 ```
 ~~~
 # cloudera install
-[centos@util ~]$ sudo yum install cloudera-manager-daemons cloudera-manager-server
+[centos@util ~]$ sudo yum install -y cloudera-manager-daemons cloudera-manager-server
 ~~~
 
 * CM 설치 완료 확인  

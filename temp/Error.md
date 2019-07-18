@@ -1,5 +1,5 @@
 ```
-https://www.studyblue.com/?src_url=https://www.studyblue.com/notes/note/n/cdh-study-cards-for-ccah-exam/deck/14983883#flashcard/view/14983883
+https://www.studyblue.com/notes/note/n/cdh-study-cards-for-ccah-exam/deck/14983883#flashcard/view/14983883
 ```
 
 hadoop

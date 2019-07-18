@@ -1,0 +1,205 @@
+These are the commands for AWS CM install
+
+*************** START OF PREQUAL ************************
+
+** update yum
+sudo yum update
+sudo yum install -y wget
+
+** Change the run level to multi-user text mode
+sudo systemctl get-default
+sudo systemctl set-default multi-user.target
+
+** Disable firewall
+sudo systemctl disable firewalld
+sudo systemctl status firewalld
+
+** Change VM Swappiness permanently
+sudo vi /etc/sysctl.conf
+	add ->
+vm.swappiness=1
+
+** Disable SE Linux
+sudo vi /etc/selinux/config 
+	change-> SELINUX=disabled
+
+** Disable Transparent Hugepage Support
+sudo vi /etc/rc.d/rc.local
+	add -> 
+echo "never" > /sys/kernel/mm/transparent_hugepage/enabled
+echo "never" > /sys/kernel/mm/transparent_hugepage/defrag
+
+sudo chmod +x /etc/rc.d/rc.local
+sudo vi /etc/default/grub
+   add -> transparent_hugepage=never (on line GRUB_CMDLINE_LINUX )
+sudo grub2-mkconfig -o /boot/grub2/grub.cfg
+sudo systemctl start tuned
+sudo tuned-adm off
+sudo tuned-adm list
+sudo systemctl stop tuned
+sudo systemctl disable tuned
+
+** Check to see that nscd service is running
+sudo yum install -y nscd
+sudo systemctl enable nscd
+sudo systemctl start nscd
+sudo systemctl status nscd
+
+** Check to see that ntp service is running
+sudo systemctl stop chronyd
+sudo systemctl disable chronyd
+sudo yum -y install ntp
+sudo systemctl enable ntpd.service
+sudo systemctl start ntpd.service
+sudo ntpdate -u 0.rhel.pool.ntp.org
+sudo hwclock --systohc
+sudo systemctl status ntpd.service
+
+** check to make sure that File lookup has priority
+sudo vi /etc/nsswitch.conf
+
+** Disable IPV6
+sudo sysctl -w net.ipv6.conf.all.disable_ipv6=1
+sudo sysctl -w net.ipv6.conf.default.disable_ipv6=1
+
+*************** END OF PREQUAL ************************
+
+** setup a password for centos in each of the hosts
+sudo passwd centos
+sudo vi /etc/ssh/sshd_config
+	change ->
+PasswordAuthentication yes
+sudo systemctl restart sshd.service
+
+** Update /etc/host
+sudo vi /etc/hosts
+	add -> 
+******* THIS IS PUBLIC IP (Add this to your Mac/Windows environment)
+52.79.36.119	cm.bdai.com	cm
+52.79.37.179	m1.bdai.com	m1
+13.124.128.147	d1.bdai.com	d1
+13.124.243.28	d2.bdai.com	d2
+13.125.74.115	d3.bdai.com	d3
+
+******* THIS IS PRIVATE IP (Add this to each of the hosts)
+172.31.4.198	cm.bdai.com	cm
+172.31.32.63	m1.bdai.com	m1
+172.31.33.121	d1.bdai.com	d1
+172.31.43.254	d2.bdai.com	d2
+172.31.32.27	d3.bdai.com	d3
+
+
+** Change the hostname
+sudo hostnamectl set-hostname cm.bdai.com
+hostname -f
+sudo reboot
+
+sudo hostnamectl set-hostname m1.bdai.com
+hostname -f
+sudo reboot
+
+sudo hostnamectl set-hostname d1.bdai.com
+hostname -f
+sudo reboot
+
+sudo hostnamectl set-hostname d2.bdai.com
+hostname -f
+sudo reboot
+
+sudo hostnamectl set-hostname d3.bdai.com
+hostname -f
+sudo reboot
+
+** REBOOT THE SERVER AND CHECK
+
+** check hostname resolution
+** first put something in /etc/hosts and then
+
+getent hosts cm.bdai.com (for example)
+
+** Install JDK on all machines
+// From the Mac 
+cd ~/Downloads
+scp -i ~/KeyPair/SEBC_HP.pem jdk-8u211-linux-x64.rpm centos@d3:. &
+// From each of the nodes
+sudo -i rpm -ivh /home/centos/jdk-8u211-linux-x64.rpm
+java -version
+// OR using yum
+yum list java*jdk-devel
+sudo yum install -y java-1.8.0-openjdk-devel.x86_64
+#sudo yum install -y oracle-j2sdk1.8
+
+
+***** Configure repository on the cm host
+sudo yum install -y wget
+sudo wget https://archive.cloudera.com/cm5/redhat/7/x86_64/cm/cloudera-manager.repo \
+-P /etc/yum.repos.d/
+** change the baseurl within cloudera-manager.repo to fit the version you want to install
+** baseurl=https://archive.cloudera.com/cm5/redhat/7/x86_64/cm/5.7.4/
+** for example: https://archive.cloudera.com/cm5/redhat/7/x86_64/cm/5.14.4/
+
+sudo rpm --import \
+https://archive.cloudera.com/cm5/redhat/7/x86_64/cm/RPM-GPG-KEY-cloudera
+
+
+** Install Cloudera Manager on the cm host
+sudo yum install -y cloudera-manager-daemons cloudera-manager-server
+
+** Install MariaDB on the cm host
+sudo yum install -y mariadb-server
+sudo systemctl enable mariadb
+sudo systemctl start mariadb
+sudo /usr/bin/mysql_secure_installation
+
+** Install mysql connector on all sqoop gateway hosts
+// From the mac after downloading
+scp -i ~/KeyPair/SEBC_HP.pem ~/Downloads/mysql-connector-java-5.1.47.tar.gz centos@acm:. 
+// Or using wget
+sudo yum install -y wget
+wget https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-5.1.47.tar.gz
+
+// From cm node
+cd /home/centos
+tar zxvf mysql-connector-java-5.1.47.tar.gz
+sudo mkdir -p /usr/share/java/
+cd mysql-connector-java-5.1.47
+sudo cp mysql-connector-java-5.1.47-bin.jar /usr/share/java/mysql-connector-java.jar
+
+** Create the databases and users in MariaDB
+mysql -u root -p
+
+CREATE DATABASE scm DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
+GRANT ALL ON scm.* TO 'scm-user'@'%' IDENTIFIED BY 'somepassword';
+
+CREATE DATABASE amon DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
+GRANT ALL ON amon.* TO 'amon-user'@'%' IDENTIFIED BY 'somepassword';
+
+CREATE DATABASE rman DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
+GRANT ALL ON rman.* TO 'rman-user'@'%' IDENTIFIED BY 'somepassword';
+
+CREATE DATABASE hue DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
+GRANT ALL ON hue.* TO 'hue-user'@'%' IDENTIFIED BY 'somepassword';
+
+CREATE DATABASE metastore DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
+GRANT ALL ON metastore.* TO 'metastore-user'@'%' IDENTIFIED BY 'somepassword';
+
+CREATE DATABASE sentry DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
+GRANT ALL ON sentry.* TO 'sentry-user'@'%' IDENTIFIED BY 'somepassword';
+
+CREATE DATABASE oozie DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
+GRANT ALL ON oozie.* TO 'oozie-user'@'%' IDENTIFIED BY 'somepassword';
+
+FLUSH PRIVILEGES;
+SHOW DATABASES;
+EXIT;
+
+** Setup the CM database
+sudo /usr/share/cmf/schema/scm_prepare_database.sh mysql scm scm-user somepassword
+sudo rm /etc/cloudera-scm-server/db.mgmt.properties
+sudo systemctl start cloudera-scm-server
+
+
+
+
+
+

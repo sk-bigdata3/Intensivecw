@@ -2,40 +2,42 @@
 https://www.studyblue.com/notes/note/n/cdh-study-cards-for-ccah-exam/deck/14983883#flashcard/view/14983883
 ```
 
+hadoop
 ```
-1. To input a file into HDFS, the client application passes the data to the NameNode, which then dicvides the data into blocks and passes the blocks to the DataNodes (T/F)
+1. To input a file into HDFS, the client application passes the data to the NameNode, which then divides the data into blocks and passes the blocks to the DataNodes (T/F)
    > false
 2. What component (Master node) of HDFS is reponsible for maintaining the namespace of the distributed file system?
    > name node
 3. What is the default file replication factor in HDFS?
    > 3
-4. The NameNode maintains the namespace of the file system using which wto sets of files?
-
+4. The NameNode maintains the namespace of the file system using which two sets of files?
+   > fs image, edits
 5. Which type of Hadoop cluster nodes provide resources for data processing?
-
+   > Namenode
 6. Which service manages cluster CPU and memory resources?
-
+   > Yarn
 7. How does a NameNode determine DataNode availability
-
+   > Heartbeat
 8. What construct is granted CPU and memory resources?
-
+   > Container
 9. What daemon/service is responsible for application fault tolerance?
-
+   > Zookeeper
 10. By default, the various tasks for a single aplication / job will run on the same node if sufficient memory and CPU resources are available on that node (T/F)
-
+   > False
 11. Using hadoop's default settings, how much data will you be able to store on your Hadoop cluster if it has 12 nodes wigh 4TB of raw disk space per node allocated to HDFS storage?
 () Approximately 3TB
 () Approximately 12TB
-() Approximately 16TB
+(*) Approximately 16TB
 () Approximately 48TB
 
 12. Which two describe functions of the Nodemanager in YARN?
-[] Tracking heartbeats from the Node Managers
-[] Running a scheduler to determine how resources are allocated
-[] Monitoring and reporting container status for map and reduce tasks
+[] Tracking heartbeats from the Node Managers -> resource manager
+[] Running a scheduler to determine how resources are allocated -> resource manager
+[*] Monitoring and reporting container status for map and reduce tasks
 [] Archiving the job history information and meta-data
-[] Negotiating cluster resouce containers from the scheduler, tracking container status, and monitoring job progress
-[] Monitoring the status of the Application Master container and restarting on failure
+[] Negotiating cluster resouce containers from the scheduler, tracking container status, and monitoring job progress -> application master
+https://hadoop.apache.org/docs/current/hadoop-yarn/hadoop-yarn-site/YARN.html
+[*] Monitoring the status of the Application Master container and restarting on failure
 
 13. You decide to create a cluster which runs HDFS in High Availability mode with automatic failover, using Quorum-based Storage. Which service keeps track of which nameNode is active at any given moment?
 1) Zookeeper
@@ -62,41 +64,6 @@ which two of the following pieces of information will be returned to you?
 
 ```
 
-hadoop
-```
-Q. input file to HDFS, client appl. pass the data to NN, which then divides the data into blocks and passes the blocks to the DN 
-   > False
-   
-Q. default file replication factor in HDFS 
-   > 3
-   
-Q. what component of HDFS maintaining the namespace
-   > Namenode
-
-Q. Namespace of the file system using two set
-   > fs image, edits
-   
-Q. which type of hadoop cluster node for data processing
-   > Namenode
-   
-Q. manage cluster CPU and memory resource
-   > Yarn
-   
-Q. How does a NN determine DN availability
-   > Heartbeat
-   
-Q. what construct CPU and memory
-   > Container
-  
-Q. responsible for application fault tolerance
-   > Zookeeper
-   
-Q. the various task for a single appl. will run on same node if sufficeint memory and CPU resource are available on that node
-   > False
-   
-Q. how much data will you be able to store on cluster if it has 12 node with 4TB.. per node allocated..?
-   > 16 TB
-```
 hive/Oozie
 ```
 Q. impala metasotre requires underlying SQL DB

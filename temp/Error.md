@@ -40,8 +40,8 @@ https://hadoop.apache.org/docs/current/hadoop-yarn/hadoop-yarn-site/YARN.html
 [*] Monitoring the status of the Application Master container and restarting on failure
 
 13. You decide to create a cluster which runs HDFS in High Availability mode with automatic failover, using Quorum-based Storage. Which service keeps track of which nameNode is active at any given moment?
-1) Zookeeper
-2) Standby Namenode (*)
+1) Zookeeper (*)
+2) Standby Namenode
 3) Secondary Namenode
 4) Quorum Journal manager
 5) YARN ResourceManager
@@ -57,9 +57,9 @@ https://hadoop.apache.org/docs/current/hadoop-yarn/hadoop-yarn-site/YARN.html
 $hdfs fsck / (please execute this command in your terminal!!!)
 which two of the following pieces of information will be returned to you?
 [] the location of each block in the cluster
-[] the number of Datanodes in the cluster
+[*] the number of Datanodes in the cluster
 [] the number of nodes in each rack in the cluster
-[] the numver of under-replicated blocks in the cluster
+[*] the number of under-replicated blocks in the cluster
 [] A list of all the files in the cluster
 
 ```
@@ -103,7 +103,7 @@ Q. block placement other two replica
          추가적인 replica가 있을 경우 다른 rack에 replica 수행
  
 Q. which command see the structure of relation
-  >
+  > 
 ```
 ```
 Q.
@@ -119,7 +119,7 @@ A. Sqoop
 Q. yarn : mapper hangs! what happen?
 A. ApplicationMaster will eventually mark the map task attemp as failed and request the node manager to terminate the map task.
 
-Q. resource manager - 정답 맞나요?
+Q. resource manager
 A.   
 1) tracking heartbeats from the nodemanagers
 2) running a scheduler to determine how resources are allocated
@@ -128,10 +128,11 @@ Q. The impala metastore requires an underlying sql database
 A. T (Impala keeps its table definitions in a traditional MYSQL or PostgreSQL database known as the metastore, the same database where Hive keeps this type of data.
 
 Q. Which two daemons typically run on each master node in hadoop cluster yarn
+A. RM, NodeManager
 
 Q. The resourcemanager will mark the map task attempt as failed and ask the nodemanager to terminate the container for the map task.
 A. X -> Application manager 라고 한다.
- reduce fail -> application master 가 check하고 node manager가 중지시킴?
+ reduce fail -> application master 가 check하고 node manager가 중지시킴
 
 ```
 

@@ -13,7 +13,7 @@ hadoop
 4. The NameNode maintains the namespace of the file system using which two sets of files?
    > fs image, edits
 5. Which type of Hadoop cluster nodes provide resources for data processing?
-   > Namenode
+   > (*) node manager
 6. Which service manages cluster CPU and memory resources?
    > Yarn
 7. How does a NameNode determine DataNode availability
@@ -21,7 +21,7 @@ hadoop
 8. What construct is granted CPU and memory resources?
    > Container
 9. What daemon/service is responsible for application fault tolerance?
-   > Zookeeper
+   > AM(Application Master)
 10. By default, the various tasks for a single aplication / job will run on the same node if sufficient memory and CPU resources are available on that node (T/F)
    > False
 11. Using hadoop's default settings, how much data will you be able to store on your Hadoop cluster if it has 12 nodes wigh 4TB of raw disk space per node allocated to HDFS storage?
@@ -34,10 +34,10 @@ hadoop
 [] Tracking heartbeats from the Node Managers -> resource manager
 [] Running a scheduler to determine how resources are allocated -> resource manager
 [*] Monitoring and reporting container status for map and reduce tasks
-[] Archiving the job history information and meta-data
+[*] Archiving the job history information and meta-data
 [] Negotiating cluster resouce containers from the scheduler, tracking container status, and monitoring job progress -> application master
 https://hadoop.apache.org/docs/current/hadoop-yarn/hadoop-yarn-site/YARN.html
-[*] Monitoring the status of the Application Master container and restarting on failure
+[] Monitoring the status of the Application Master container and restarting on failure = ??
 
 13. You decide to create a cluster which runs HDFS in High Availability mode with automatic failover, using Quorum-based Storage. Which service keeps track of which nameNode is active at any given moment?
 1) Zookeeper (*)
@@ -88,9 +88,10 @@ Q. Hive table consists of a schema stored in Hive [metastore] and
    data stored in [hdfs]
    
 Q. 2 daemons run on mn in hadoop cluster running MapReduce v2 on Yarn
-  > RM, NodeManager
+  > RM, name node, 저널노드, zookeeper
   
 Q. block placement other two replica
+   > (현실 답.. 4 -> 아마 rack2에 이미 있을꺼고, 1과3중 하나 노드 2개에 복사하는게 답)
   >  - replica에 대한 block 배치
       1) replica 1
          클라이언트가 클러스터 밖에 있는 경우 블록의 첫 복제는 임의 랙 과 노드를 선택하여 수행
@@ -126,9 +127,6 @@ A.
 
 Q. The impala metastore requires an underlying sql database
 A. T (Impala keeps its table definitions in a traditional MYSQL or PostgreSQL database known as the metastore, the same database where Hive keeps this type of data.
-
-Q. Which two daemons typically run on each master node in hadoop cluster yarn
-A. RM, NodeManager
 
 Q. The resourcemanager will mark the map task attempt as failed and ask the nodemanager to terminate the container for the map task.
 A. X -> Application manager 라고 한다.

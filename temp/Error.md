@@ -210,3 +210,355 @@ hdfs dfsadmin -safemode leave
 > export HADOOP_CLIENT_OPTS="-Xms64m -Xmx1024m"
 
 ```
+
+
+```
+1.
+-- solution.sql (경로 : /home/training/problem1/solution.sql)
+select a.id as id, 
+       a.type as type,
+       a.status as status,
+       a.amount as amount,
+       round(a.amount - w.average,2) as different
+from problem1.account a,
+     (select type, avg(amount) as average from problem1.account group by type) w 
+where a.status='Active'
+and a.type = w.type
+;
+
+hive -f solution.sql
+
+A100000	Basic Checking	Active	44539	-7402.48
+A100002	Basic Checking	Active	11483	-40458.48
+...
+
+2.
+create database if not exists problem2;
+use problem2;
+
+create external table if not exists solution (
+id int,
+fname string,
+lname string,
+address string,
+city string,
+state string,
+zip string,
+birthday string,
+hireday string
+)
+comment "employee"
+row format delimited fields terminated by "\t"
+stored as parquet location "/user/hive/warehouse/employee"
+
+hive> dfs -cp /user/training/problem2/data/employee/*.parquet /user/hive/warehouse/employee/
+hive> select * from solution;
+
+10000	Rigel	Shaw	Ap #124-4664 Vulputate, Rd.	Cannole	OH	83380	07/12/80	05/30/18
+10001	Chancellor	Bond	Ap #702-9298 Pretium Street	Piana degli Albanesi	AZ	38128	03/02/95	04/12/18
+...
+
+3.
+use problem3;
+
+create external table if not exists solution (
+id int,
+fname string,
+lname string,
+hphone string
+)
+comment "problem3"
+row format delimited fields terminated by "\t"
+stored as orc location "/user/training/problem3/solution"
+;
+
+insert into problem3.solution
+select a.id
+, a.fname
+, a.lname
+, a.hphone
+from problem3.customer a
+     inner join
+     problem3.account b
+     on a.id = b.custid
+where 1=1
+  and b.amount < 0
+;
+
+hive> select * from solution ;
+
+10001	Sybil	Wiley	(504) 780-0366
+10010	Brittany	Martinez	(341) 462-0222
+
+4.
+
+create database if not exists problem4;
+use problem4;
+
+create external table if not exists employee1 (
+cust_id int,
+fname string,
+lname string,
+adress string,
+city string,
+state string,
+zip string
+)
+COMMENT "employee1"
+ROW FORMAT DELIMITED FIELDS TERMINATED BY "\t"
+STORED AS TEXTFILE LOCATION "/user/training/problem4/data/employee1/"
+;
+
+create external table if not exists employee2 (
+cust_id int,
+digit string,
+fname string,
+lname string,
+adress string,
+city string,
+state string,
+zip string
+)
+COMMENT "employee2"
+ROW FORMAT DELIMITED FIELDS TERMINATED BY ","
+STORED AS TEXTFILE LOCATION "/user/training/problem4/data/employee2/"
+;
+
+create external table if not exists solution (
+cust_id int,
+fname string,
+lname string,
+adress string,
+city string,
+state string,
+zip string
+)
+COMMENT "problem4"
+ROW FORMAT DELIMITED FIELDS TERMINATED BY "\t"
+STORED AS TEXTFILE LOCATION "/user/training/problem4/solution/"
+;
+
+insert into solution
+select *
+from employee1
+where 1=1
+and state = 'CA'
+union all
+select cust_id
+, fname
+, lname
+, adress
+, city
+, state
+, zip
+from employee2
+where 1=1
+and state = 'CA'
+;
+
+hive> select * from solution ;
+
+10000063	Burton	Hayes	Ap #720-4012 Vivamus Avenue	San Diego	CA	96066-0000
+10000068	Ria	Herman	2974 Cras St.	San Francisco	CA	95310-0000
+..
+
+5.
+-- solution.sql (경로 : /home/training/problem5)
+
+use problem5;
+
+select concat_ws('\t',fname , lname, city, state)
+from customer c
+where c.city = 'Palo Alto'
+and   c.state = 'CA'
+union all
+select concat_ws('\t',fname , lname, city, state)
+from employee e
+where e.city = 'Palo Alto'
+and   e.state = 'CA'
+;
+
+hive -f ./solution.sql
+
+Farrah	Preston	Palo Alto	CA
+Brielle	Hudson	Palo Alto	CA
+...
+
+6.
+
+use problem6 ;
+
+create external table solution
+(
+  id int , 
+  fname string,
+  lname string, 
+  address string,
+  city string,
+  state string,
+  zip string,
+  birthday string
+ )
+;
+
+insert into table solution 
+select id,
+       fname,
+       lname,
+       address,
+       city,
+       state,
+       zip,
+       substr(birthday,1,5)
+from employee;
+
+hive> select * from solution limit 10;
+
+10000000	Deanna	Lane	900-1514 Vitae, Rd.	Lafayette	LA	97827	08/31
+10000001	Hall	Garrett	9656 Urna Avenue	Tucson	AZ	86511	08/24
+...
+
+7.
+-- solution.sql (경로 : /home/training/problem7)
+
+select concat(a.fname,' ' , a.lname)
+from (
+select e.*
+from employee e
+where e.city = 'Seattle'
+order by fname,lname
+) a
+;
+
+hive -f ./solution.sql
+
+8.
+
+create database if not exists problem8;
+use problem8;
+
+$ sqoop export \
+ --table solution \
+ --connect "jdbc:mysql://localhost/problem8" \
+ --username cloudera \
+ --password cloudera \
+ --export-dir "/user/training/problem8/data/customer/" \
+ --fields-terminated-by "\t" \
+ --columns "id, fname , lname , address , city, state , zip , birthday" ;
+
+$ mysql -u cloudera -p
+Enter password: cloudera
+
+mysql> show databases;
+mysql> use problem8;
+mysql> select * from solution limit 10;
+
+9.
+use problem9;
+
+create external table solution 
+( 
+ id string,
+ fname string,
+ lname string,
+ address string,
+ city string,
+ state string,
+ zip string,
+ birthday string
+);
+
+insert into solution
+select distinct concat('A',id) as id,
+       fname,
+       lname,
+       address,
+       city,
+       state,
+       zip,
+       birthday
+from customer;
+
+hive> select * from solution limit 10;
+
+A1000000	Medge	Roach	P.O. Box 799, 6865 Nec Rd.	Racine	WI	56336	08/10/2016
+A1000001	Nasim	Stone	P.O. Box 975, 759 Scelerisque Street	Tuscaloosa	AL	36696	08/16/2016
+...
+
+10.
+
+use problem10;
+
+create view solution as
+select c.id as id , 
+       c.fname as fname, 
+       c.lname as lname,
+       c.city as city,
+       c.state as state,
+       b.charge as charge, 
+       substr(b.tstamp,0,10) as billdate
+from customer c , 
+     billing b
+where c.id = b.id 
+;
+
+select * from solution limit 10;
+
+1000000	Medge	Roach	Racine	WI	15.79	2017-03-05
+1000001	Nasim	Stone	Tuscaloosa	AL	57.73	2016-09-05
+...
+
+11.
+-- solution.sql(경로 : /home/training/problem11)
+
+a)
+use default;
+
+select b.name 
+    , count(*)
+  from order_details a,
+       products b
+ where a.prod_id = b.prod_id
+   and b.brand = 'Dualcore'
+group by b.name
+limit 3
+;
+
+1.5 TB SATA3 Disk	3956
+16 GB Micro SD	3279
+2 GB Micro SD	1979
+
+b)
+select to_date(o.order_date), 
+       sum(p.price) as revenue , 
+       sum(p.price - p.cost) as profit
+  from orders o,
+       order_details d,
+       products p
+ where o.order_id = d.order_id
+   and d.prod_id  = p.prod_id
+   and p.brand='Dualcore'
+group by to_date(o.order_date);
+
+2008-06-01	170742	14018
+2008-06-02	270806	26356
+...
+
+c)
+select o.order_id,
+       sum(p.price) as total
+  from orders o,
+       order_details d,
+       products p
+ where o.order_id = d.order_id
+   and d.prod_id  = p.prod_id
+ group by o.order_id
+ order by total desc
+ limit 10;
+
+5605465	940577
+5997571	702157
+...
+
+hive -f solution.sql
+```

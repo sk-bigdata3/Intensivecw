@@ -4,11 +4,11 @@ https://www.studyblue.com/notes/note/n/cdh-study-cards-for-ccah-exam/deck/149838
 
 ```
 1. To input a file into HDFS, the client application passes the data to the NameNode, which then dicvides the data into blocks and passes the blocks to the DataNodes (T/F)
-
+   > false
 2. What component (Master node) of HDFS is reponsible for maintaining the namespace of the distributed file system?
-
+   > name node
 3. What is the default file replication factor in HDFS?
-
+   > 3
 4. The NameNode maintains the namespace of the file system using which wto sets of files?
 
 5. Which type of Hadoop cluster nodes provide resources for data processing?
@@ -39,7 +39,7 @@ https://www.studyblue.com/notes/note/n/cdh-study-cards-for-ccah-exam/deck/149838
 
 13. You decide to create a cluster which runs HDFS in High Availability mode with automatic failover, using Quorum-based Storage. Which service keeps track of which nameNode is active at any given moment?
 1) Zookeeper
-2) Standby Namenode
+2) Standby Namenode (*)
 3) Secondary Namenode
 4) Quorum Journal manager
 5) YARN ResourceManager
@@ -48,7 +48,7 @@ https://www.studyblue.com/notes/note/n/cdh-study-cards-for-ccah-exam/deck/149838
 14. Identify the function performed by a secondary namenode daemon configured to run with a single Namenode
 () It acts as a standby namenode, providing a high availability profile for clients.
 () It performs realtime backups of the NameNode.
-() It combines the fsimage and edits files produced by the NameNode
+(*) It combines the fsimage and edits files produced by the NameNode
 () It provides an alterante HDFS endpoint when the NameNode is too busy.
 
 15. You have a cluster running 32 slave nodes and three master nodes, running MapReduce v1 (MRv1). You execute the command:

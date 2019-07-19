@@ -2,6 +2,13 @@
 https://www.studyblue.com/notes/note/n/cdh-study-cards-for-ccah-exam/deck/14983883#flashcard/view/14983883
 ```
 
+```
+https://stackoverflow.com/questions/33114398/rack-topology-in-hadoop
+
+What is the rule governing the formatting of the underlying filesystem on slave nodes in a Hadoop cluster?
+   >ext3, ext2인가암튼 다른 파일시스템
+```
+
 hadoop
 ```
 1. To input a file into HDFS, the client application passes the data to the NameNode, which then divides the data into blocks and passes the blocks to the DataNodes (T/F)
